@@ -1,4 +1,4 @@
-package com.management.connectDB;
+package com.management.connectdb;
 
 import java.io.IOException;
 import java.sql.*;
