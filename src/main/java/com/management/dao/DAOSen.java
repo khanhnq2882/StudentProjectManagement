@@ -6,12 +6,15 @@ import com.management.entity.User;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import java.security.MessageDigest;
+import java.sql.Connection;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.List;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.*;
 
 public class DAOSen extends ConnectJDBC {
 
@@ -98,5 +101,70 @@ public class DAOSen extends ConnectJDBC {
             e.printStackTrace();
         }
         return null;
+    }
+    public List<User> AllUser() {
+        List<User> list = new ArrayList<>();
+        String sql = "select * from user";
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                list.add(new User(rs.getInt(1), rs.getString(2), rs.getString(3),
+                        rs.getInt(4), rs.getString(5), rs.getString(6), rs.getString(7),
+                        rs.getString(8), rs.getString(9), rs.getInt(10), rs.getInt(11), rs.getString(12), rs.getString(13)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    public String RandomBullSh() {
+        String result = "";
+        Random rand = new Random();
+
+        for (int i = 0; i < 6; i++) {
+            int a = rand.nextInt(10);
+            result = result + a;
+        }
+        return result;
+    }
+
+    public static void send(String to, String sub,
+                            String msg, final String user, final String pass) {
+
+        Properties props = new Properties();
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+
+        Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(user, pass);
+            }
+        });
+
+        try {
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(user));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+            message.setSubject(sub);
+            message.setContent(msg, "text/html");
+            Transport.send(message);
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void AddUser(String mail, String user, String pass, String name) {
+        String sql = "INSERT INTO user (email, username, pass, fullname) VALUES ('" + mail + "', '" + user + "', '" + pass + "', '" + name + "');";
+        try {
+            Connection conn = getConnection();
+            Statement s = conn.createStatement();
+            s.executeUpdate(sql);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
 }
