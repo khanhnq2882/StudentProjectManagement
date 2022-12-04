@@ -28,21 +28,21 @@ public class HomeController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             HttpSession session = request.getSession();
-            User Loged = (User) session.getAttribute("Loged");
+            User loged = (User) session.getAttribute("Loged");
 
-            if (Loged == null) {
+            if (loged == null) {
                 request.getRequestDispatcher("Login_sen").forward(request, response);
                 return;
             }
-            List<ClassUser> listCU = daosen.AllClassUser(Loged.getUser_id());
+            List<ClassUser> listCU = daosen.AllClassUser(loged.getUser_id());
             session.setAttribute("listCU", listCU);
             
-            Vector<Class_s> vect = daoChangePass.viewClassByStudent(Loged.getUser_id() + "");
+            Vector<Class_s> vect = daoChangePass.viewClassByStudent(loged.getUser_id() + "");
             request.setAttribute("vectC", vect);
             
-            request.getRequestDispatcher("jsp/Home.jsp").forward(request, response);
+            request.getRequestDispatcher("views/Home.jsp").forward(request, response);
         } catch (Exception e) {
-            request.getRequestDispatcher("404.html").forward(request, response);
+            request.getRequestDispatcher("views/404.html").forward(request, response);
         }
     }
 
