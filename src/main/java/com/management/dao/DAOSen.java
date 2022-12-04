@@ -12,6 +12,7 @@ import javax.mail.internet.MimeMessage;
 import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.util.*;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
@@ -35,6 +36,18 @@ public class DAOSen extends ConnectJDBC {
         }
         return null;
     }
+
+    public String RandomBullSh() {
+        String result = "";
+        Random rand = new Random();
+
+        for (int i = 0; i < 6; i++) {
+            int a = rand.nextInt(10);
+            result = result + a;
+        }
+        return result;
+    }
+
     public List<ClassUser> AllClassUser(int userid) {
         List<ClassUser> list = new ArrayList<>();
         String sql = "SELECT * FROM classuser a\n"
@@ -102,6 +115,7 @@ public class DAOSen extends ConnectJDBC {
         }
         return null;
     }
+
     public List<User> AllUser() {
         List<User> list = new ArrayList<>();
         String sql = "select * from user";
@@ -117,27 +131,20 @@ public class DAOSen extends ConnectJDBC {
         }
         return list;
     }
-    public String RandomBullSh() {
-        String result = "";
-        Random rand = new Random();
-
-        for (int i = 0; i < 6; i++) {
-            int a = rand.nextInt(10);
-            result = result + a;
-        }
-        return result;
-    }
 
     public static void send(String to, String sub,
-                            String msg, final String user, final String pass) {
+                            String msg, final String user, final String pass) throws MessagingException {
+        Properties prop = new Properties();
 
-        Properties props = new Properties();
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.port", "587");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
+        prop.put("mail.smtp.host", "smtp.gmail.com");
+        prop.put("mail.smtp.port", "465");
+        prop.put("mail.smtp.auth", "true");
+        prop.put("mail.smtp.starttls.enable", "true");
+        prop.put("mail.smtp.starttls.required", "true");
+        prop.put("mail.smtp.ssl.protocols", "TLSv1.2");
+        prop.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 
-        Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+        Session session = Session.getInstance(prop, new javax.mail.Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(user, pass);
@@ -145,15 +152,18 @@ public class DAOSen extends ConnectJDBC {
         });
 
         try {
+
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(user));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
             message.setSubject(sub);
-            message.setContent(msg, "text/html");
+            message.setContent(msg, "text/html; charset=UTF-8");
+
             Transport.send(message);
 
         } catch (MessagingException e) {
             e.printStackTrace();
+            throw new MessagingException(e.getMessage());
         }
     }
 
