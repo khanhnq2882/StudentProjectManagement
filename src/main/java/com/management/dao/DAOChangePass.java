@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.util.Vector;
 
 public class DAOChangePass extends ConnectJDBC {
+
     public Vector<Class_s> viewClassByStudent(String s) {
         Vector<Class_s> vect = new Vector<>();
         String sql = "select * from class a inner join classuser b "
