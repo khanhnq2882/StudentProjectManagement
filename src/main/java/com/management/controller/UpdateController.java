@@ -9,7 +9,7 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 
-@WebServlet(name = "UpdateController", value = "/UpdateProfile")
+@WebServlet(name = "UpdateController", value = "/Update")
 public class UpdateController extends HttpServlet {
 
     static DAOSen daos = new DAOSen();
@@ -27,7 +27,7 @@ public class UpdateController extends HttpServlet {
 //            request.getRequestDispatcher("Login_sen").forward(request, response);
 //            return;
 //        }
-        request.getRequestDispatcher("jsp/update.jsp").forward(request, response);
+        request.getRequestDispatcher("views/Update.jsp").forward(request, response);
     }
 
     @Override
@@ -49,8 +49,7 @@ public class UpdateController extends HttpServlet {
             System.out.println("ko van de");
         } else {
             request.setAttribute("updated", "Your mail is not accepted");
-            RequestDispatcher di = request.getRequestDispatcher("jsp/update.jsp");
-            di.forward(request, response);
+            request.getRequestDispatcher("views/Update.jsp").forward(request, response);
             return;
         }
 
@@ -61,16 +60,14 @@ public class UpdateController extends HttpServlet {
         }
         if (mobile.length() != 10 || !mobile.startsWith("0")) {
             request.setAttribute("updated", "Your mobile phone must be about 10 digits from 0 to 9 and must be start with 0!");
-            RequestDispatcher di = request.getRequestDispatcher("Views/Update.jsp");
-            di.forward(request, response);
+            request.getRequestDispatcher("views/Update.jsp").forward(request, response);
             return;
         }
         try {
             int checkM = Integer.parseInt(mobile);
         } catch (Exception e) {
             request.setAttribute("updated", "Your mobile phone must be about 10 digits from 0 to 9 and must be start with 0!");
-            RequestDispatcher di = request.getRequestDispatcher("Views/Update.jsp");
-            di.forward(request, response);
+            request.getRequestDispatcher("views/Update.jsp").forward(request, response);
             return;
         }
         String fblink = request.getParameter("fblink");
@@ -80,8 +77,7 @@ public class UpdateController extends HttpServlet {
         }
         if (!fblink.startsWith("https://www.facebook.com/") && !fblink.endsWith("/")) {
             request.setAttribute("updated", "It's not a facebook link");
-            RequestDispatcher di = request.getRequestDispatcher("Views/Update.jsp");
-            di.forward(request, response);
+            request.getRequestDispatcher("views/Update.jsp").forward(request, response);
         }
         int n = dao.Update(userid, fullname, gender, dob, email, mobile, fblink);
         if (n > 0) {
@@ -93,7 +89,6 @@ public class UpdateController extends HttpServlet {
         User Loged = daos.Loged(userid);
         session.setAttribute("Loged", Loged);
 
-        RequestDispatcher di = request.getRequestDispatcher("Views/Update.jsp");
-        di.forward(request, response);
+        request.getRequestDispatcher("views/Update.jsp").forward(request, response);
     }
 }

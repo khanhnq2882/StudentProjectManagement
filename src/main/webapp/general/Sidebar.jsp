@@ -10,7 +10,7 @@
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="Home">
         <div class="sidebar-brand-icon rotate-n-15">
-            <img src="img/cai nay hoi la.png" style="max-height: 50px">
+            <img src="<c:url value="/assets/img/logo-university.png"/>" style="max-height: 50px; border-radius: 5px;">
         </div>
         <div class="sidebar-brand-text mx-3">Group 1 Project</div>
     </a>

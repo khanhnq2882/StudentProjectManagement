@@ -39,12 +39,12 @@
                                     <div class="text-center">
                                         <br>
                                         <img src="<c:url value="/assets/img/${Loged.avatar_link}"/>"
-                                             style="border-radius: 50%" class="avatar img-circle img-thumbnail"
-                                             alt="avatar" width="300" height="300">
+                                             style="border-radius: 50%; width: 250px; height: 250px;" class="avatar img-circle img-thumbnail mb-3"
+                                             alt="avatar">
                                         <h6>Upload a different photo...</h6>
                                         <span style="color: red">${haizz}</span>
                                         <input type="file" name="image"
-                                               class="file form-control text-center center-block file-upload">
+                                               class="file form-control text-center center-block file-upload mb-3 mx-4">
                                         <input type="submit" value="Save Image"/>
                                     </div>
                                     </hr><br>
