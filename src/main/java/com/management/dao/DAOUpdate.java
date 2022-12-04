@@ -34,4 +34,5 @@ public class DAOUpdate extends ConnectJDBC {
             ex.printStackTrace();
         }
     }
+
 }
