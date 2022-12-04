@@ -8,10 +8,7 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.MessageDigest;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.List;
+import java.util.*;
 
 public class DAOSen extends ConnectJDBC {
 
@@ -32,6 +29,18 @@ public class DAOSen extends ConnectJDBC {
         }
         return null;
     }
+
+    public String RandomBullSh() {
+        String result = "";
+        Random rand = new Random();
+
+        for (int i = 0; i < 6; i++) {
+            int a = rand.nextInt(10);
+            result = result + a;
+        }
+        return result;
+    }
+
     public List<ClassUser> AllClassUser(int userid) {
         List<ClassUser> list = new ArrayList<>();
         String sql = "SELECT * FROM classuser a\n"
