@@ -23,10 +23,10 @@ public class UpdateController extends HttpServlet {
         HttpSession session = request.getSession();
 
         User Log = (User) session.getAttribute("Loged");
-//        if (Log == null) {
-//            request.getRequestDispatcher("Login_sen").forward(request, response);
-//            return;
-//        }
+        if (Log == null) {
+            request.getRequestDispatcher("Login_sen").forward(request, response);
+            return;
+        }
         request.getRequestDispatcher("views/Update.jsp").forward(request, response);
     }
 
@@ -36,6 +36,12 @@ public class UpdateController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession();
+
+        User Log = (User) session.getAttribute("Loged");
+        if (Log == null) {
+            request.getRequestDispatcher("Login_sen").forward(request, response);
+            return;
+        }
 
         String userid = request.getParameter("userid");
         String fullname = request.getParameter("fullname");
