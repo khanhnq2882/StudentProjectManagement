@@ -37,6 +37,12 @@ public class UpdateController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession();
 
+        User Log = (User) session.getAttribute("Loged");
+        if (Log == null) {
+            request.getRequestDispatcher("Login_sen").forward(request, response);
+            return;
+        }
+
         String userid = request.getParameter("userid");
         String fullname = request.getParameter("fullname");
         String gender = request.getParameter("gender");

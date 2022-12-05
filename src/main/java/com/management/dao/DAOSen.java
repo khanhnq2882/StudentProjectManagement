@@ -13,10 +13,9 @@ import javax.mail.internet.MimeMessage;
 import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.util.*;
 import java.sql.SQLException;
 import java.sql.Statement;
-
+import java.util.*;
 
 public class DAOSen extends ConnectJDBC {
 
@@ -122,6 +121,22 @@ public class DAOSen extends ConnectJDBC {
         return null;
     }
 
+    public List<User> AllUser() {
+        List<User> list = new ArrayList<>();
+        String sql = "select * from user";
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                list.add(new User(rs.getInt(1), rs.getString(2), rs.getString(3),
+                        rs.getInt(4), rs.getString(5), rs.getString(6), rs.getString(7),
+                        rs.getString(8), rs.getString(9), rs.getInt(10), rs.getInt(11), rs.getString(12), rs.getString(13)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     public static void send(String to, String sub,
                             String msg, final String user, final String pass) throws MessagingException {
         Properties prop = new Properties();
@@ -154,6 +169,17 @@ public class DAOSen extends ConnectJDBC {
         } catch (MessagingException e) {
             e.printStackTrace();
             throw new MessagingException(e.getMessage());
+        }
+    }
+
+    public void AddUser(String mail, String user, String pass, String name) {
+        String sql = "INSERT INTO user (email, username, pass, fullname) VALUES ('" + mail + "', '" + user + "', '" + pass + "', '" + name + "');";
+        try {
+            Connection conn = getConnection();
+            Statement s = conn.createStatement();
+            s.executeUpdate(sql);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
     }
 
