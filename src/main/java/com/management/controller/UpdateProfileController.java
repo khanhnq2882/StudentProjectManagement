@@ -9,8 +9,8 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 
-@WebServlet(name = "UpdateController", value = "/Update")
-public class UpdateController extends HttpServlet {
+@WebServlet(name = "UpdateProfileController", value = "/UpdateProfile")
+public class UpdateProfileController extends HttpServlet {
 
     static DAOSen daos = new DAOSen();
     static DAOUpdate dao = new DAOUpdate();
@@ -49,7 +49,8 @@ public class UpdateController extends HttpServlet {
             System.out.println("ko van de");
         } else {
             request.setAttribute("updated", "Your mail is not accepted");
-            request.getRequestDispatcher("views/Update.jsp").forward(request, response);
+            RequestDispatcher di = request.getRequestDispatcher("views/Update.jsp");
+            di.forward(request, response);
             return;
         }
 
@@ -60,14 +61,16 @@ public class UpdateController extends HttpServlet {
         }
         if (mobile.length() != 10 || !mobile.startsWith("0")) {
             request.setAttribute("updated", "Your mobile phone must be about 10 digits from 0 to 9 and must be start with 0!");
-            request.getRequestDispatcher("views/Update.jsp").forward(request, response);
+            RequestDispatcher di = request.getRequestDispatcher("views/Update.jsp");
+            di.forward(request, response);
             return;
         }
         try {
             int checkM = Integer.parseInt(mobile);
         } catch (Exception e) {
             request.setAttribute("updated", "Your mobile phone must be about 10 digits from 0 to 9 and must be start with 0!");
-            request.getRequestDispatcher("views/Update.jsp").forward(request, response);
+            RequestDispatcher di = request.getRequestDispatcher("views/Update.jsp");
+            di.forward(request, response);
             return;
         }
         String fblink = request.getParameter("fblink");
@@ -77,7 +80,8 @@ public class UpdateController extends HttpServlet {
         }
         if (!fblink.startsWith("https://www.facebook.com/") && !fblink.endsWith("/")) {
             request.setAttribute("updated", "It's not a facebook link");
-            request.getRequestDispatcher("views/Update.jsp").forward(request, response);
+            RequestDispatcher di = request.getRequestDispatcher("views/Update.jsp");
+            di.forward(request, response);
         }
         int n = dao.Update(userid, fullname, gender, dob, email, mobile, fblink);
         if (n > 0) {
@@ -89,6 +93,7 @@ public class UpdateController extends HttpServlet {
         User Loged = daos.Loged(userid);
         session.setAttribute("Loged", Loged);
 
-        request.getRequestDispatcher("views/Update.jsp").forward(request, response);
+        RequestDispatcher di = request.getRequestDispatcher("views/Update.jsp");
+        di.forward(request, response);
     }
 }

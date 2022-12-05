@@ -13,14 +13,41 @@ import javax.mail.internet.MimeMessage;
 import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.util.*;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.*;
 
 
 public class DAOSen extends ConnectJDBC {
 
     private final static String secretKey = "g1swp";
+
+    public String encrypt(String strToEncrypt) { // mah oa . cai dau tien la mat khau truyen vao
+        try {
+            MessageDigest sha = MessageDigest.getInstance("SHA-1");
+            byte[] key = secretKey.getBytes("UTF-8");
+            key = sha.digest(key);
+            key = Arrays.copyOf(key, 16);
+            SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+            return Base64.getEncoder().encodeToString(cipher.doFinal(strToEncrypt.getBytes("UTF-8")));
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+        return null;
+    }
+
+    public String RandomBullSh() {
+        String result = "";
+        Random rand = new Random();
+
+        for (int i = 0; i < 6; i++) {
+            int a = rand.nextInt(10);
+            result = result + a;
+        }
+        return result;
+    }
 
     public List<ClassUser> AllClassUser(int userid) {
         List<ClassUser> list = new ArrayList<>();
@@ -45,11 +72,11 @@ public class DAOSen extends ConnectJDBC {
         return list;
     }
 
-//    public User Loged(String user_id) {
-//        String sql = "select * from user where user_id = '" + user_id + "'";
-//        return null;
-//    }
-    
+    public User Loged(String user_id) {
+        String sql = "select * from user where user_id = '" + user_id + "'";
+        return null;
+    }
+
     public User EmailExist(String mail) {
         String sql = "select * from user where email = '" + mail + "'";
         ResultSet rs = getData(sql);
@@ -71,7 +98,8 @@ public class DAOSen extends ConnectJDBC {
         try {
             while (rs.next()) {
                 return new User(rs.getInt(1), rs.getString(2), rs.getString(3),
-                        rs.getInt(4), rs.getString(5), rs.getString(6), rs.getString(7),rs.getString(8), rs.getString(9), rs.getInt(10), rs.getInt(11), rs.getString(12), rs.getString(13));
+                        rs.getInt(4), rs.getString(5), rs.getString(6), rs.getString(7),
+                        rs.getString(8), rs.getString(9), rs.getInt(10), rs.getInt(11), rs.getString(12), rs.getString(13));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -94,44 +122,19 @@ public class DAOSen extends ConnectJDBC {
         return null;
     }
 
-    public String RandomBullSh() {
-        String result = "";
-        Random rand = new Random();
-
-        for (int i = 0; i < 6; i++) {
-            int a = rand.nextInt(10);
-            result = result + a;
-        }
-        return result;
-    }
-
-
-    public String encrypt(String strToEncrypt) { // mah oa . cai dau tien la mat khau truyen vao
-        try {
-            MessageDigest sha = MessageDigest.getInstance("SHA-1");
-            byte[] key = secretKey.getBytes("UTF-8");
-            key = sha.digest(key);
-            key = Arrays.copyOf(key, 16);
-            SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
-            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-            return Base64.getEncoder().encodeToString(cipher.doFinal(strToEncrypt.getBytes("UTF-8")));
-        } catch (Exception e) {
-            System.out.println(e.toString());
-        }
-        return null;
-    }
-
     public static void send(String to, String sub,
-                            String msg, final String user, final String pass) {
+                            String msg, final String user, final String pass) throws MessagingException {
+        Properties prop = new Properties();
 
-        Properties props = new Properties();
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.port", "587");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
+        prop.put("mail.smtp.host", "smtp.gmail.com");
+        prop.put("mail.smtp.port", "465");
+        prop.put("mail.smtp.auth", "true");
+        prop.put("mail.smtp.starttls.enable", "true");
+        prop.put("mail.smtp.starttls.required", "true");
+        prop.put("mail.smtp.ssl.protocols", "TLSv1.2");
+        prop.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 
-        Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+        Session session = Session.getInstance(prop, new javax.mail.Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(user, pass);
@@ -139,17 +142,21 @@ public class DAOSen extends ConnectJDBC {
         });
 
         try {
+
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(user));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
             message.setSubject(sub);
-            message.setContent(msg, "text/html");
+            message.setContent(msg, "text/html; charset=UTF-8");
+
             Transport.send(message);
 
         } catch (MessagingException e) {
             e.printStackTrace();
+            throw new MessagingException(e.getMessage());
         }
     }
+
     public void ChangePassbyEmail(String mail, String repass) {
         String sql = "UPDATE user\n"
                 + " SET pass = '" + repass + "'\n"
@@ -175,20 +182,6 @@ public class DAOSen extends ConnectJDBC {
             e.printStackTrace();
         }
         return list;
-    }
-    public User Loged(String user_id) {
-        String sql = "select * from user where user_id = '" + user_id + "'";
-        ResultSet rs = getData(sql);
-        try {
-            while (rs.next()) {
-                return new User(rs.getInt(1), rs.getString(2), rs.getString(3),
-                        rs.getInt(4), rs.getString(5), rs.getString(6), rs.getString(7),
-                        rs.getString(8), rs.getString(9), rs.getInt(10), rs.getInt(11), rs.getString(12), rs.getString(13));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
 

@@ -33,7 +33,7 @@
                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">${Loged.fullname}</span>
                 <img class="img-profile rounded-circle"
-                     src="uploads/${Loged.avatar_link}">
+                     src="<c:url value="/assets/img/${Loged.avatar_link}"/>">
             </a>
             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                  aria-labelledby="userDropdown">
