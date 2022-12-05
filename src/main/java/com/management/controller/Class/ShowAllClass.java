@@ -95,7 +95,7 @@ public class ShowAllClass extends HttpServlet {
                 request.setAttribute("startFrom", startFrom);
                 request.setAttribute("vect", vectClass);
                 request.setAttribute("vectT", vectT);
-                request.getRequestDispatcher("/jsp/class/ShowAllClass.jsp").forward(request, response);
+                request.getRequestDispatcher("/views/ShowAllClass.jsp").forward(request, response);
             }
             if (service.equals("AddClass")) {
                 String submit = request.getParameter("submit");
@@ -104,7 +104,7 @@ public class ShowAllClass extends HttpServlet {
                 request.setAttribute("vectT", vectT);
                 request.setAttribute("listSub", listSub);
                 if (submit == null) {
-                    request.getRequestDispatcher("/jsp/class/AddClass.jsp").forward(request, response);
+                    request.getRequestDispatcher("/views/AddClass.jsp").forward(request, response);
                 } else {
                     String class_code = dao.standardization(request.getParameter("class_code"));
                     String trainer = request.getParameter("trainer");
@@ -129,7 +129,7 @@ public class ShowAllClass extends HttpServlet {
                         request.setAttribute("listSub", listSub);
 
                         request.setAttribute("mess", "Not allow null");
-                        request.getRequestDispatcher("/jsp/class/AddClass.jsp").forward(request, response);
+                        request.getRequestDispatcher("/views/AddClass.jsp").forward(request, response);
                         return;
                     }
                     if (dao.checkClassCode(class_code)) {
@@ -145,7 +145,7 @@ public class ShowAllClass extends HttpServlet {
                         request.setAttribute("listSub", listSub);
 
                         request.setAttribute("mess", "This class is already exist");
-                        request.getRequestDispatcher("/jsp/class/AddClass.jsp").forward(request, response);
+                        request.getRequestDispatcher("/views/AddClass.jsp").forward(request, response);
                         return;
                     }
 
@@ -153,7 +153,7 @@ public class ShowAllClass extends HttpServlet {
                     dao.addClass(clas);
 
                     request.setAttribute("link", "ShowAllClass");
-                    request.getRequestDispatcher("/jsp/class/Success.jsp").forward(request, response);
+                    request.getRequestDispatcher("/views/Success.jsp").forward(request, response);
                 }
             }
             if (service.equals("updateClass")) {
@@ -181,7 +181,8 @@ public class ShowAllClass extends HttpServlet {
                     request.setAttribute("block5", block5);
                     request.setAttribute("status", status);
                     request.setAttribute("update", "updateClass");
-                    request.getRequestDispatcher("/jsp/class/AddClass.jsp").forward(request, response);
+                    request.getRequestDispatcher("/views/AddClass.jsp").forward(request, response);
+                    return;
                 } else {
                     String class_code = dao.standardization(request.getParameter("class_code"));
                     String trainer = request.getParameter("trainer");
@@ -202,14 +203,14 @@ public class ShowAllClass extends HttpServlet {
                         request.setAttribute("status", status);
                         request.setAttribute("update", "updateClass");
                         request.setAttribute("mess", "Not allow null");
-                        request.getRequestDispatcher("/jsp/class/AddClass.jsp").forward(request, response);
+                        request.getRequestDispatcher("/views/AddClass.jsp").forward(request, response);
                         return;
                     }
                     else {
                         Class_s s = new Class_s(Integer.parseInt(classId), class_code, trainer, subject, class_Year, class_term, block5, Integer.parseInt(status));
                         dao.updateAllClass(s);
                         request.setAttribute("link", "ShowAllClass");
-                        request.getRequestDispatcher("/jsp/class/Success.jsp").forward(request, response);
+                        request.getRequestDispatcher("/views/Success.jsp").forward(request, response);
                     }
 
                 }
@@ -220,7 +221,7 @@ public class ShowAllClass extends HttpServlet {
                 Vector<User> vT = dao.showAllTeacher();
                 request.setAttribute("vect", v);
                 request.setAttribute("vectT", vT);
-                request.getRequestDispatcher("/jsp/class/ShowAllClassBySubjectID.jsp").forward(request, response);
+                request.getRequestDispatcher("/views/ShowAllClassBySubjectID.jsp").forward(request, response);
             }
             if (service.equals("test")) {
                 request.getRequestDispatcher("/general/HomeExample.jsp").forward(request, response);
