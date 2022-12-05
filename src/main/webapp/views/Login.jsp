@@ -54,7 +54,7 @@
                                 </form>
                                 <hr>
                                 <div class="text-center">
-                                    <a class="small" href="Forgot_Password">Forgot Password?</a>
+                                    <a class="small" href="<%=request.getContextPath()%>/ForgotPassword">Forgot Password?</a>
                                 </div>
                                 <div class="text-center">
                                     <a class="small" href="Register">Create an Account!</a>

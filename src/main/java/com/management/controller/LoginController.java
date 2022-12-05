@@ -2,6 +2,7 @@ package com.management.controller;
 
 import com.management.dao.DAOSen;
 import com.management.entity.User;
+import com.management.util.Alert;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -46,7 +47,7 @@ public class LoginController extends HttpServlet {
                 if (Loged == null && Loged1 == null) {
                     session.setAttribute("user", user);
                     session.setAttribute("pass", pass);
-                    request.setAttribute("mess", "Sai tài khoản hoặc mật khẩu rồi bạn!");
+                    request.setAttribute("alert", new Alert().alert("Incorrect!", "", Alert.ERROR));
                     request.getRequestDispatcher("views/Login.jsp").forward(request, response);
                     return;
                 } else {
@@ -54,7 +55,7 @@ public class LoginController extends HttpServlet {
                         if (Loged.getStatus() == 2) {
                             session.setAttribute("user", user);
                             session.setAttribute("pass", pass);
-                            request.setAttribute("mess", "Tài khoản đã bị khóa!");
+                            request.setAttribute("alert", new Alert().alert("", "Your account was locked!", Alert.ERROR));
                             request.getRequestDispatcher("views/Login.jsp").forward(request, response);
                             return;
                         }
@@ -64,7 +65,7 @@ public class LoginController extends HttpServlet {
                         if (Loged1.getStatus() == 2) {
                             session.setAttribute("user", user);
                             session.setAttribute("pass", pass);
-                            request.setAttribute("mess", "Tài khoản đã bị khóa!");
+                            request.setAttribute("alert", new Alert().alert("", "Your account was locked!", Alert.ERROR));
                             request.getRequestDispatcher("views/Login.jsp").forward(request, response);
                             return;
                         }

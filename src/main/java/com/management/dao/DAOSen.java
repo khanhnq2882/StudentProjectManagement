@@ -2,6 +2,7 @@ package com.management.dao;
 
 import com.management.connectdb.ConnectJDBC;
 import com.management.entity.ClassUser;
+import com.management.entity.Subject;
 import com.management.entity.User;
 
 import javax.crypto.Cipher;
@@ -12,7 +13,6 @@ import javax.mail.internet.MimeMessage;
 import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.util.*;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
@@ -73,6 +73,11 @@ public class DAOSen extends ConnectJDBC {
 
     public User Loged(String user_id) {
         String sql = "select * from user where user_id = '" + user_id + "'";
+        return null;
+    }
+
+    public User EmailExist(String mail) {
+        String sql = "select * from user where email = '" + mail + "'";
         ResultSet rs = getData(sql);
         try {
             while (rs.next()) {
@@ -177,4 +182,33 @@ public class DAOSen extends ConnectJDBC {
             ex.printStackTrace();
         }
     }
+
+    public void ChangePassbyEmail(String mail, String repass) {
+        String sql = "UPDATE user\n"
+                + " SET pass = '" + repass + "'\n"
+                + " WHERE email = '" + mail + "';";
+        try {
+            Connection conn = getConnection();
+            Statement s = conn.createStatement();
+            s.executeUpdate(sql);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+    public List<Subject> AllSubjecta() {
+        List<Subject> list = new ArrayList<>();
+        String sql = "SELECT * FROM subject a left join user b on a.author_id = b.user_id;";
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                list.add(new Subject(rs.getInt(1), rs.getString(2), rs.getString(3),
+                        rs.getString(8), rs.getInt(5)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+
 }
