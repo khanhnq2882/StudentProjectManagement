@@ -3,7 +3,6 @@ package com.management.dao;
 import com.management.connectdb.ConnectJDBC;
 import com.management.entity.Class_s;
 import com.management.entity.User;
-
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.MessageDigest;
@@ -11,13 +10,23 @@ import java.sql.*;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Stack;
+import com.management.entity.User;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import java.security.MessageDigest;
+import java.sql.*;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.Stack;
+import java.sql.*;
+import java.util.Stack;
 import java.util.Vector;
 
 public class DAOChangePass extends ConnectJDBC {
     Connection conn = ConnectJDBC.getConnection();
-
     ResultSet rs = null;
     PreparedStatement ps = null;
+
 
     public Vector<Class_s> viewClassByStudent(String s) {
         Vector<Class_s> vect = new Vector<>();
@@ -103,25 +112,8 @@ public class DAOChangePass extends ConnectJDBC {
         return n;
     }
 
-    public Vector<User> showAllTeacher() {
-        Vector<User> v = new Vector<>();
-        String sql = "select * from user where role_id = 2 or role_id = 3";
-        ResultSet rs = getData(sql);
-        try {
-            while (rs.next()) {
-                v.add(new User(rs.getInt(1), rs.getString(2), rs.getString(3),
-                        rs.getInt(4), rs.getString(5), rs.getString(6), rs.getString(7),
-                        rs.getString(8), rs.getString(9), rs.getInt(10), rs.getInt(11), rs.getString(12), rs.getString(13)));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return v;
-    }
-
     public Vector<Class_s> ViewAllClassName(String name, String startFrom, String where) {
         Vector<Class_s> list = new Vector<>();
-
         String sql = "select * from class where class_code like '%" + name + "%'"
                 + where + " LIMIT 20 offset " + startFrom;
         //  System.out.println(sql);
@@ -225,8 +217,57 @@ public class DAOChangePass extends ConnectJDBC {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-
         return n;
+    }
+
+    public Vector<User> showAllTeacher() {
+        Vector<User> v = new Vector<>();
+        String sql = "select * from user where role_id = 2 or role_id = 3";
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                v.add(new User(rs.getInt(1), rs.getString(2), rs.getString(3),
+                        rs.getInt(4), rs.getString(5), rs.getString(6), rs.getString(7),
+                        rs.getString(8), rs.getString(9), rs.getInt(10), rs.getInt(11), rs.getString(12), rs.getString(13)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return v;
+    }
+
+    public int countClass(String name, String where) {
+        String sql = "select count(*) from class"
+                + " where class_code like '%" + name + "%' "
+                + where;
+        ResultSet rs = getData(sql);
+        try {
+            if (rs.next()) {
+
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public String standardization(String st) {
+        try {
+            st = st.trim();
+            st = st.replaceAll("\\s+", " ");
+            String[] temp = st.split(" ");
+            st = "";
+            for (int i = 0; i < temp.length; i++) {
+                st += String.valueOf(temp[i].charAt(0)) + temp[i].substring(1);
+                if (i < temp.length - 1) {
+                    st += " ";
+                }
+            }
+            return st;
+        } catch (Exception e) {
+        }
+        return "";
     }
 
     public Class_s viewClassById(String name) {
@@ -272,7 +313,6 @@ public class DAOChangePass extends ConnectJDBC {
         }
     }
 
-
     public Vector<Class_s> viewALlClassBySubject(String s) {
         Vector<Class_s> vect = new Vector<>();
         String sql = "select * from class where subject_id = " + s;
@@ -295,4 +335,5 @@ public class DAOChangePass extends ConnectJDBC {
         }
         return vect;
     }
+
 }

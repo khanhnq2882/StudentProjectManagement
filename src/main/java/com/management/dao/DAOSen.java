@@ -4,7 +4,6 @@ import com.management.connectdb.ConnectJDBC;
 import com.management.entity.ClassUser;
 import com.management.entity.Subject;
 import com.management.entity.User;
-
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import javax.mail.*;
@@ -210,5 +209,21 @@ public class DAOSen extends ConnectJDBC {
         return list;
     }
 
+
+
+    public List<Subject> AllSubjects() {
+        List<Subject> list = new ArrayList<>();
+        String sql = "SELECT * FROM subject a left join user b on a.author_id = b.user_id;";
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                list.add(new Subject(rs.getInt(1), rs.getString(2), rs.getString(3),
+                        rs.getString(8), rs.getInt(5)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 
 }

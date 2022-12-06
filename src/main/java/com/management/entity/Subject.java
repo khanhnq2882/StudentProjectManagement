@@ -2,12 +2,12 @@ package com.management.entity;
 
 public class Subject {
 
-    int subject_id;
-    String subject_code;
-    String subject_name;
-    int author_id;
-    String author_name;
-    int status;
+    private int subject_id;
+    private String subject_code;
+    private String subject_name;
+    private int author_id;
+    private String author_name;
+    private int status;
 
     public Subject() {
     }
