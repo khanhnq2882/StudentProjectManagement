@@ -226,4 +226,76 @@ public class DAOSen extends ConnectJDBC {
         return list;
     }
 
+    public List<User> AllAuthor() {
+        List<User> list = new ArrayList<>();
+        String sql = "SELECT * FROM user where role_id = 3;";
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                list.add(new User(rs.getInt(1), rs.getString(2), rs.getString(3),
+                        rs.getInt(4), rs.getString(5), rs.getString(6), rs.getString(7),
+                        rs.getString(8), rs.getString(9), rs.getInt(10), rs.getInt(11), rs.getString(12), rs.getString(13)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<Subject> AllSubjecta2() {
+        List<Subject> list = new ArrayList<>();
+        String sql = "SELECT * FROM subject a left join user b on a.author_id = b.user_id where a.status = 1;";
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                list.add(new Subject(rs.getInt(1), rs.getString(2), rs.getString(3),
+                        rs.getString(8), rs.getInt(5)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<Subject> AllSubject(int index, String order) {
+        List<Subject> list = new ArrayList<>();
+        String sql = "SELECT * FROM subject a left join user b on a.author_id = b.user_id order by " + order + " limit 12 offset " + index + ";";
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                list.add(new Subject(rs.getInt(1), rs.getString(2), rs.getString(3),
+                        rs.getString(8), rs.getInt(5)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<Subject> AllSubject2(int index, String order) {
+        List<Subject> list = new ArrayList<>();
+        String sql = "SELECT * FROM subject a left join user b on a.author_id = b.user_id where a.status = 1 order by " + order + " limit 12 offset " + index + ";";
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                list.add(new Subject(rs.getInt(1), rs.getString(2), rs.getString(3),
+                        rs.getString(8), rs.getInt(5)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public void addSubject(String subject_code, String subject_name, String author_id, String status) {
+        String sql = "INSERT INTO subject (subject_code, subject_name, author_id, status)"
+                + " VALUES ('" + subject_code + "', '" + subject_name + "', '" + author_id + "', '" + status + "');";
+        try {
+            Connection conn = getConnection();
+            Statement s = conn.createStatement();
+            s.executeUpdate(sql);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
 }
