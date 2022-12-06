@@ -3,17 +3,23 @@ package com.management.dao;
 import com.management.connectdb.ConnectJDBC;
 import com.management.entity.Class_s;
 import com.management.entity.User;
-
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import java.security.MessageDigest;
+import java.sql.*;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.Stack;
 import java.sql.*;
 import java.util.Stack;
 import java.util.Vector;
 
 public class DAOChangePass extends ConnectJDBC {
-
     Connection conn = ConnectJDBC.getConnection();
 
     ResultSet rs = null;
     PreparedStatement ps = null;
+
 
     public Vector<Class_s> viewClassByStudent(String s) {
         Vector<Class_s> vect = new Vector<>();
@@ -260,10 +266,69 @@ public class DAOChangePass extends ConnectJDBC {
         return vect;
     }
 
+    private final static String secretKey = "g1swp";
 
+    public String encrypt(String strToEncrypt) { // mah oa . cai dau tien la mat khau truyen vao
+        try {
+            MessageDigest sha = MessageDigest.getInstance("SHA-1");
+            byte[] key = secretKey.getBytes("UTF-8");
+            key = sha.digest(key);
+            key = Arrays.copyOf(key, 16);
+            SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+            return Base64.getEncoder().encodeToString(cipher.doFinal(strToEncrypt.getBytes("UTF-8")));
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+        return null;
+    }
 
+    public int UpdatePass(String pass, int id) {
+        int n = 0;
+        String sql = "update user set pass = '" + encrypt(pass) + "'"
+                + " where user_id = '" + id + "'";
+        try {
+            Statement state = getConnection().createStatement();
+            n = state.executeUpdate(sql);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return n;
+    }
 
+    public int CountClass(String name, String where) {
+        String sql = "select count(*) from class"
+                + " where class_code like '%" + name + "%' "
+                + where;
+        ResultSet rs = getData(sql);
+        try {
+            if (rs.next()) {
 
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 
+    public String chuannHoa(String st) {
+        try {
+            st = st.trim();
+            st = st.replaceAll("\\s+", " ");
+            String[] temp = st.split(" ");
+            st = "";
+            for (int i = 0; i < temp.length; i++) {
+                st += String.valueOf(temp[i].charAt(0)) + temp[i].substring(1);
+                if (i < temp.length - 1) {
+                    st += " ";
+                }
+            }
+            return st;
+        } catch (Exception e) {
+        }
+        return "";
+    }
 
 }
