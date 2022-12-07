@@ -29,54 +29,47 @@ public class UpdateImgController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        HttpSession session = request.getSession();
-        if (session.getAttribute("Loged") == null) {
-            request.getRequestDispatcher("Login_sen").forward(request, response);
-        }
-        if (session.getAttribute("Loged") != null) {
-            String filename = null;
-            DAOUpdate daoUpdate = new DAOUpdate();
-            DAOSen daoSen = new DAOSen();
-            try {
-                DiskFileItemFactory factory = new DiskFileItemFactory();
-                ServletContext servletContext = this.getServletConfig().getServletContext();
-                File repository = (File) servletContext.getAttribute("javax.servlet.context.tempdir");
-                factory.setRepository(repository);
-                ServletFileUpload upload = new ServletFileUpload(factory);
-                List<FileItem> items = upload.parseRequest(request);
-                Iterator<FileItem> iter = items.iterator();
-                HashMap<String, String> fields = new HashMap<>();
-                while (iter.hasNext()) {
-                    FileItem item = iter.next();
-                    if (item.isFormField()) {
-                        fields.put(item.getFieldName(), item.getString());
+        String filename = null;
+        DAOUpdate daoUpdate = new DAOUpdate();
+        DAOSen daoSen = new DAOSen();
+        User user = (User) request.getSession().getAttribute("Loged");
+        try {
+            DiskFileItemFactory factory = new DiskFileItemFactory();
+            ServletContext servletContext = this.getServletConfig().getServletContext();
+            File repository = (File) servletContext.getAttribute("javax.servlet.context.tempdir");
+            factory.setRepository(repository);
+            ServletFileUpload upload = new ServletFileUpload(factory);
+            List<FileItem> items = upload.parseRequest(request);
+            Iterator<FileItem> iter = items.iterator();
+            HashMap<String, String> fields = new HashMap<>();
+            while (iter.hasNext()) {
+                FileItem item = iter.next();
+                if (item.isFormField()) {
+                    fields.put(item.getFieldName(), item.getString());
+                } else {
+                    filename = item.getName();
+                    if (filename == null || filename.equals("")) {
+                        request.setAttribute("haizz", "Please choose a image.");
+                        request.getRequestDispatcher("views/Update.jsp").forward(request, response);
+                        return;
                     } else {
                         filename = item.getName();
-                        String userid = fields.get("userid");
-                        if (filename == null || filename.equals("")) {
-                            filename = daoSen.Loged(userid).getAvatar_link();
-                            request.setAttribute("haizz", "Làm ơn hãy chọn một ảnh rồi mới Lưu");
-                            request.getRequestDispatcher("views/Update.jsp").forward(request, response);
-                        } else {
-                            filename = item.getName();
-                            Path path = Paths.get(filename);
-                            String storePath = servletContext.getRealPath("/uploads");
-                            File uploadFile = new File(storePath + "/" + path.getFileName());
-                            File deleteFile = new File(storePath + "/" + daoSen.Loged(userid).getAvatar_link());
-                            deleteFile.delete();
-                            item.write(uploadFile);
-                        }
+                        Path path = Paths.get(filename);
+                        String storePath = servletContext.getRealPath("/uploads");
+                        File uploadFile = new File(storePath + "/" + path.getFileName());
+                        File deleteFile = new File(storePath + "/" + user.getAvatar_link());
+                        deleteFile.delete();
+                        item.write(uploadFile);
                     }
                 }
-                String userid = fields.get("userid");
-                daoUpdate.UpdateAvatar(userid, filename);
-                session.removeAttribute("Loged");
-                User Loged = daoSen.Loged(userid);
-                session.setAttribute("Loged", Loged);
-            } catch (Exception e) {
             }
 
-            request.getRequestDispatcher("views/Update.jsp").forward(request, response);
+            daoUpdate.UpdateAvatar(Integer.toString(user.getUser_id()), filename);
+            request.getSession().setAttribute("Loged", daoSen.Loged(Integer.toString(user.getUser_id())));
+            response.sendRedirect(request.getContextPath() + "/UpdateProfile");
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.getRequestDispatcher("views/404.html").forward(request, response);
         }
     }
 }

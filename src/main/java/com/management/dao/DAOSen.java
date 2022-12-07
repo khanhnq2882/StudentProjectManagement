@@ -4,6 +4,9 @@ import com.management.connectdb.ConnectJDBC;
 import com.management.entity.ClassUser;
 import com.management.entity.Subject;
 import com.management.entity.User;
+import org.apache.commons.codec.binary.StringUtils;
+import org.apache.poi.util.StringUtil;
+
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import javax.mail.*;
@@ -72,6 +75,16 @@ public class DAOSen extends ConnectJDBC {
 
     public User Loged(String user_id) {
         String sql = "select * from user where user_id = '" + user_id + "'";
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                return new User(rs.getInt(1), rs.getString(2), rs.getString(3),
+                        rs.getInt(4), rs.getString(5), rs.getString(6), rs.getString(7),
+                        rs.getString(8), rs.getString(9), rs.getInt(10), rs.getInt(11), rs.getString(12), rs.getString(13));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
@@ -194,6 +207,7 @@ public class DAOSen extends ConnectJDBC {
             ex.printStackTrace();
         }
     }
+
     public List<Subject> AllSubjecta() {
         List<Subject> list = new ArrayList<>();
         String sql = "SELECT * FROM subject a left join user b on a.author_id = b.user_id;";
@@ -209,7 +223,20 @@ public class DAOSen extends ConnectJDBC {
         return list;
     }
 
-
+    public List<Subject> getAllSubject() {
+        List<Subject> list = new ArrayList<>();
+        String sql = "SELECT * FROM subject a left join user b on a.author_id = b.user_id;";
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                list.add(new Subject(rs.getInt(1), rs.getString(2), rs.getString(3),
+                        rs.getString(8), rs.getInt(5)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 
     public List<Subject> AllSubjects() {
         List<Subject> list = new ArrayList<>();
@@ -297,5 +324,61 @@ public class DAOSen extends ConnectJDBC {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+    }
+
+    public List<Subject> getFilterSubject(String filter, int index, int size) {
+        List<Subject> list = new ArrayList<>();
+        String sql = "SELECT * FROM subject";
+        if(!filter.equals("")) {
+            sql += "\nwhere " + filter;
+        }
+        sql += "\nlimit " + size + " offset " + (index - 1) * size;
+
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                list.add(new Subject(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getInt(4),
+                        rs.getInt(5),
+                        rs.getString(6)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public int countSubject(String status) {
+        int count = 0;
+        String sql = "select count(*) from subject";
+        if(!status.equals("")) {
+            sql += "\nwhere status = " + status;
+        }
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                count = rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return count;
+    }
+
+    public User getUserById(int userId) {
+        String sql = "select * from user where user_id = " + userId;
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                return new User(rs.getInt(1), rs.getString(2), rs.getString(3),
+                        rs.getInt(4), rs.getString(5), rs.getString(6), rs.getString(7),
+                        rs.getString(8), rs.getString(9), rs.getInt(10), rs.getInt(11), rs.getString(12), rs.getString(13));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

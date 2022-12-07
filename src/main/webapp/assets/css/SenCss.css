@@ -127,7 +127,6 @@ h5:hover {
     padding: 10px;
     font-weight: 700;
     display: flex;
-    flex-direction: column-reverse;
 }
 .add{
     height: 0;
