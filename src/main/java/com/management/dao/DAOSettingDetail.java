@@ -47,14 +47,12 @@ public class DAOSettingDetail extends ConnectJDBC {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-
         return list;
     }
 
     public Setting SearchSetID(String s) {
         List<Setting> list = new ArrayList<>();
         String sql = "select * from setting where setting_id = " + s;
-
         try {
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
@@ -70,7 +68,6 @@ public class DAOSettingDetail extends ConnectJDBC {
     public static void main(String[] args) {
         DAOSettingDetail dao = new DAOSettingDetail();
         System.out.print(dao.viewType());
-        //dao.editSetting(1, 1, "cai nay moi", "value moi", "order moi", 1, "cai gi the nay");
     }
 
 }

@@ -210,9 +210,7 @@ public class DAOSetting extends ConnectJDBC {
     public int updateStatus(int status, int setting_id) {
         int n = 0;
         try {
-
-            String sql = "update setting\n"
-                    + " set status = ? where setting_id = ?";
+            String sql = "update setting\n" + " set status = ? where setting_id = ?";
             ps = conn.prepareStatement(sql);
             ps.setInt(1, status);
             ps.setInt(2, setting_id);
@@ -267,11 +265,5 @@ public class DAOSetting extends ConnectJDBC {
         } else {
             System.out.println("wrong");
         }
-//        System.out.println(dao.SearchSetID("1"));
-//
-//        List<Setting> list = dao.viewType();
-//        for (Setting temp : list) {
-//            System.out.println(temp);
-//        }
     }
 }
