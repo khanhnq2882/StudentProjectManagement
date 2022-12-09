@@ -1,4 +1,5 @@
 <%@ page import="com.management.util.EncodeSring" %>
+<%@ page import="org.apache.commons.lang3.StringUtils" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -97,42 +98,33 @@
             </div>
 
             <%
-                String subjectCode = "";
-                String authorId = "";
-                String status = "";
-
-                if (request.getParameter("subjectCode") != null) {
-                    subjectCode = request.getParameter("subjectCode");
-                }
-                if (request.getParameter("authorId") != null) {
-                    authorId = request.getParameter("authorId");
-                }
-                if (request.getParameter("status") != null) {
-                    status = request.getParameter("status");
-                }
+                String subjectCode = (String) request.getAttribute("subjectCode");
+                String authorId = (String) request.getAttribute("authorId");
+                String status = (String) request.getAttribute("status");
 
                 StringBuilder paramPaginate = new StringBuilder();
 
-                if (!subjectCode.equals("")) {
-                    if (!paramPaginate.toString().equals("")) {
+                if (StringUtils.isNotEmpty(subjectCode)) {
+                    if (StringUtils.isNotEmpty(paramPaginate)) {
                         paramPaginate.append("&");
                     }
                     paramPaginate.append("subjectCode=" + subjectCode);
                 }
-                if (!authorId.equals("")) {
-                    if (!paramPaginate.toString().equals("")) {
+                if (StringUtils.isNotEmpty(authorId)) {
+                    if (StringUtils.isNotEmpty(paramPaginate)) {
                         paramPaginate.append("&");
                     }
                     paramPaginate.append("authorId=" + authorId);
                 }
-                if (!status.equals("")) {
-                    if (!paramPaginate.toString().equals("")) {
+                if (StringUtils.isNotEmpty(status)) {
+                    if (StringUtils.isNotEmpty(paramPaginate)) {
                         paramPaginate.append("&");
                     }
                     paramPaginate.append("status=" + status);
                 }
 
                 String encodeStr = EncodeSring.encode(paramPaginate.toString());
+                String paramPaginateUrl = StringUtils.isNotEmpty(encodeStr) ? "param=" + encodeStr + "&" : "";
             %>
 
             <nav aria-label="...">
@@ -146,7 +138,7 @@
                                 <span class="page-link">Previous</span>
                             </c:if>
                             <c:if test="${indexPage ne 1}">
-                                <a class="page-link" href="<%=request.getContextPath()%>/SubjectList?param=<%=encodeStr%>">Previous</a>
+                                <a class="page-link" href="<%=request.getContextPath()%>/SubjectList?<%=paramPaginateUrl%>index=${indexPage - 1}">Previous</a>
                             </c:if>
                         </li>
 
@@ -156,7 +148,7 @@
                                     <span class="page-link">${i}<span class="sr-only">(current)</span></span>
                                 </c:if>
                                 <c:if test="${i ne indexPage}">
-                                    <a class="page-link" href="<%=request.getContextPath()%>/SubjectList?param=<%=encodeStr%>">${i}</a>
+                                    <a class="page-link" href="<%=request.getContextPath()%>/SubjectList?<%=paramPaginateUrl%>index=${i}">${i}</a>
                                 </c:if>
                             </li>
                         </c:forEach>
@@ -166,7 +158,7 @@
                                 <span class="page-link">Next</span>
                             </c:if>
                             <c:if test="${indexPage ne lastPage}">
-                                <a class="page-link" href="<%=request.getContextPath()%>/SubjectList?param=<%=encodeStr%>">Next</a>
+                                <a class="page-link" href="<%=request.getContextPath()%>/SubjectList?<%=paramPaginateUrl%>index=${indexPage + 1}">Next</a>
                             </c:if>
                         </li>
                     </c:if>
