@@ -181,7 +181,7 @@
 <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <form action="<%=request.getContextPath()%>/SubjectList?add" method="post">
+        <form action="<%=request.getContextPath()%>/SubjectList?action=add" method="post">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
@@ -193,30 +193,27 @@
                     <ul>
                         <li class="mb-3">
                             <input oninput="validationCode()" id="scode" class="form-control form-control-user"
-                                   type="text" name="scode" placeholder="Subject Code ..."/>
-                            <span id="txtcode" style="color: red"></span>
+                                   type="text" name="scode" placeholder="Subject Code ..." required/>
                         </li>
                         <li class="mb-3">
                             <input oninput="validationName()" id="sname" class="form-control form-control-user"
-                                   type="text" name="sname" placeholder="Subject Name ..."/>
-                            <span id="txtname" style="color: red"></span>
+                                   type="text" name="sname" placeholder="Subject Name ..." required/>
                         </li>
                         <li class="mb-3">
-                            <select onchange="validateAuthor()" id="aname" name="aname"
-                                    class="form-control form-control-user">
+                            <select onchange="validateAuthor()" name="aname"
+                                    class="form-control form-control-user" required>
                                 <option selected disabled>Select a option ...</option>
                                 <c:forEach var="o" items="${listAuthor}">
                                     <option ${author == o.user_id ? "selected" : ""}
                                             value="${o.user_id}">${o.fullname}</option>
                                 </c:forEach>
                             </select>
-                            <span id="txtaname" style="color: red"></span>
                         </li>
                     </ul>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <button class="btn btn-primary" type="submit" data-dismiss="modal">Add</button>
+                    <button class="btn btn-primary" type="submit">Add</button>
                 </div>
             </div>
         </form>
@@ -246,6 +243,8 @@
         })
     });
 </script>
+
+${alert eq null ? "" : alert}
 
 </body>
 

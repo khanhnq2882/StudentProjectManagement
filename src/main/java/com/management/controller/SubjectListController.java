@@ -4,6 +4,7 @@ import com.management.dao.DAOChangePass;
 import com.management.dao.DAOSen;
 import com.management.entity.Subject;
 import com.management.entity.User;
+import com.management.util.Alert;
 import com.management.util.EncodeSring;
 import com.management.util.Extracted;
 import org.apache.commons.collections4.CollectionUtils;
@@ -114,6 +115,15 @@ public class SubjectListController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
+
+        HttpSession session = request.getSession();
+        User Loged = (User) session.getAttribute("Loged");
+
+        if (Loged == null) {
+            request.getRequestDispatcher("Login_sen").forward(request, response);
+            return;
+        }
+
         try {
             String action = request.getParameter("action");
             if (action.equals("search")) {
@@ -128,65 +138,17 @@ public class SubjectListController extends HttpServlet {
     }
 
     private void doPost_add(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        String status = "1";
-//        String code = daoc.chuannHoa(request.getParameter("code"));
-//        String name = daoc.chuannHoa(request.getParameter("name"));
-//        String author = daoc.chuannHoa(request.getParameter("author"));
-//        List<Subject> listl = dao.AllSubjecta();
-//        for (Subject o : listl) {
-//            if (o.getSubject_code().equals(code) || o.getSubject_name().equals(name)) {
-//                request.setAttribute("title", "Add thất bại");
-//                request.setAttribute("message", "Môn học đã tồn tại!");
-//                request.setAttribute("theme", "Danger");
-//                request.setAttribute("active", "active");
-//                request.setAttribute("code", code);
-//                request.setAttribute("name", name);
-//                request.setAttribute("author", author);
-//                List<Subject> listl2 = dao.AllSubjecta2();
-//                List<Subject> listl3 = dao.AllSubjecta();
-//                int n = 0;
-//                int nn = 0;
-//                for (Subject subject : listl2) {
-//                    n++;
-//                }
-//                for (Subject subject : listl3) {
-//                    nn++;
-//                }
-//                request.setAttribute("count", n);
-//                request.setAttribute("count1", nn);
-//                List<Subject> list = dao.AllSubject(0, "subject_code");
-//                request.setAttribute("list", list);
-//                List<Subject> list2 = dao.AllSubject2(0, "subject_code");
-//                request.setAttribute("list2", list2);
-//                request.setAttribute("listU", listU);
-//                request.getRequestDispatcher("views/SubjectList.jsp").forward(request, response);
-//
-//                return;
-//            }
-//        }
-//        if (code.length() > 15 || name.length() > 100) {
-//            request.setAttribute("title", "Add thất bại");
-//            request.setAttribute("message", "Subject code hoặc Subject name quá dài!");
-//            request.setAttribute("theme", "Danger");
-//            request.setAttribute("active", "active");
-//            request.setAttribute("code", code);
-//            request.setAttribute("name", name);
-//            request.setAttribute("author", author);
-//        }
-//        if (code.equals("") || name.equals("") || author.equals("name")) {
-//            request.setAttribute("title", "Add thất bại");
-//            request.setAttribute("message", "Hãy nhập đầy đủ thông tin!");
-//            request.setAttribute("theme", "Danger");  // Danger == mau do
-//            request.setAttribute("active", "active");
-//            request.setAttribute("code", code);
-//            request.setAttribute("name", name);
-//            request.setAttribute("author", author);
-//        } else {
-//            request.setAttribute("title", "Thêm thành công");
-//            request.setAttribute("message", "Add successfully!");
-//            request.setAttribute("theme", "Success");   // Success == mau xanh
-//            dao.addSubject(code, name, author, status);
-//        }
+        String code = request.getParameter("scode");
+        String name = request.getParameter("scode");
+        String author = request.getParameter("aname");
+        if(daoSen.checkExistedSubject(code, name)) {
+            request.setAttribute("alert", new Alert().alert("", "Subject was existed!", Alert.ERROR));
+            processRequest(request, response, null);
+        } else {
+            daoSen.addSubject(code, name, author, "1");
+            request.setAttribute("alert", new Alert().alert("", "Add new subject successfully!", Alert.SUCCESS));
+            processRequest(request, response, null);
+        }
     }
 
     private void doPost_search(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -239,6 +239,20 @@ public class DAOSen extends ConnectJDBC {
         return list;
     }
 
+    public boolean checkExistedSubject(String subjectCode, String subjectName) {
+        boolean result = false;
+        String sql = "select * from subject where subject_code = '" + subjectCode + "' or subject_name = '" + subjectName + "'";
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                result = true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     public List<Subject> getAllSubject() {
         List<Subject> list = new ArrayList<>();
         String sql = "SELECT * FROM subject a left join user b on a.author_id = b.user_id;";
