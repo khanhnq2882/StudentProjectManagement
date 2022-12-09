@@ -36,20 +36,15 @@
 <!-- Page Wrapper -->
 <div id="wrapper">
 
-    <!-- Sidebar -->
-    <jsp:include page="../Sidebar.jsp"></jsp:include>
-    <!-- End of Sidebar -->
+    <jsp:include page="/general/Sidebar.jsp"></jsp:include>
 
-    <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
 
         <!-- Main Content -->
         <div id="content">
 
-            <!-- Topbar -->
-            <jsp:include page="../Header.jsp"></jsp:include>
-            <!-- End of Topbar -->
-            <!-- Begin Page Content -->
+            <jsp:include page="/general/Header.jsp"></jsp:include>
+
             <div class="container-fluid">
 
                 <h1 style="font-weight: bold" class="h3 mb-2 text-gray-800"> Criteria List</h1>
@@ -110,7 +105,7 @@
                                         </td>
                                         <td>${o.criteria_order}</td>
                                         <td>
-                                            <form id="idS${o.criteria_id}" action="Criteria?go=updateStatus" method="POST">
+                                            <form id="idS${o.criteria_id}" action="?go=updateStatus" method="POST">
                                                 <input type="hidden" name="criId" value="${o.criteria_id}">
                                                 <select class="form-control form-control-user" name="status" onchange="submitForm(idS${o.criteria_id})" >
                                                     <option ${o.status == 2 ? "selected" : ""} value="2">Deactivate</option>
@@ -131,7 +126,7 @@
                             <div class="paging" >
 
                                 <c:forEach begin="1" end="${maxP}" var="i"  >
-                                    <a class ="active" href="Criteria?index=${i}">${i}</a>
+                                    <a class ="active" href="?index=${i}">${i}</a>
                                 </c:forEach>
 
                             </div>
@@ -166,8 +161,7 @@
 <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
 </a>
-<!-- Logout Modal-->
-<jsp:include page="../LogOut.jsp"></jsp:include>
+<jsp:include page="/general/LogOut.jsp"></jsp:include>
 
 <!-- Bootstrap core JavaScript-->
 <script src="vendor/jquery/jquery.min.js"></script>

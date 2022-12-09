@@ -6,7 +6,6 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="Enitiy.Criteria"%>
 <%@page import="java.util.Vector"%>
 <%@ page import="com.management.entity.Criteria" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -56,19 +55,15 @@
 </style>
 <div id="wrapper">
 
-  <!-- Sidebar -->
-  <jsp:include page="../Sidebar.jsp"></jsp:include>
-  <!-- End of Sidebar -->
+  <jsp:include page="/general/Sidebar.jsp"></jsp:include>
 
-  <!-- Content Wrapper -->
   <div id="content-wrapper" class="d-flex flex-column">
 
     <!-- Main Content -->
     <div id="content">
 
-      <!-- Topbar -->
-      <jsp:include page="../Header.jsp"></jsp:include>
-      <!-- End of Topbar -->
+      <jsp:include page="/general/Header.jsp"></jsp:include>
+
       <%
         ArrayList<Criteria> vect = (ArrayList<Criteria>) request.getAttribute("IterList");
 
@@ -169,8 +164,7 @@
   <i class="fas fa-angle-up"></i>
 </a>
 
-<!-- Logout Modal-->
-<jsp:include page="../LogOut.jsp"></jsp:include>
+<jsp:include page="/general/LogOut.jsp"></jsp:include>
 
 <!-- Bootstrap core JavaScript-->
 <script src="vendor/jquery/jquery.min.js"></script>
