@@ -12,21 +12,17 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-/**
- *
- * @author ASUS
- */
-@WebServlet(name = "ChangePassWord", urlPatterns = {"/ChangePassWord"})
+@WebServlet(name = "ChangePassWordController", urlPatterns = {"/ChangePassWord"})
 public class ChangePassWordController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
      *
-     * @param request  servlet request
+     * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -38,20 +34,20 @@ public class ChangePassWordController extends HttpServlet {
             HttpSession session = request.getSession();
             User Loged = (User) session.getAttribute("Loged");
             if (Loged == null) {
-                request.getRequestDispatcher("ControllerHome").forward(request, response);
+                request.getRequestDispatcher("/views/Login.jsp").forward(request, response);
             }
             if (service == null) {
                 service = "FormPass";
             }
             if (service.equals("FormPass")) {
                 session.removeAttribute("mess_p");
-                request.getRequestDispatcher("/jsp/ChangePass.jsp").forward(request, response);
+                request.getRequestDispatcher("/views/ChangePass.jsp").forward(request, response);
             }
             if (service.equals("ChangeForm")) {
                 String submit = request.getParameter("submit");
                 if (submit == null) {
                     session.removeAttribute("mess_p");
-                    request.getRequestDispatcher("/jsp/ChangePass.jsp").forward(request, response);
+                    request.getRequestDispatcher("/views/ChangePass.jsp").forward(request, response);
                 } else {
                     String PassNow = request.getParameter("PassNow");
                     String passNew = request.getParameter("passNew");
@@ -63,18 +59,18 @@ public class ChangePassWordController extends HttpServlet {
                         request.setAttribute("passNew", passNew);
                         request.setAttribute("re_pass", re_pass);
 
-                        session.setAttribute("mess_p", "Not null");
-                        request.getRequestDispatcher("/jsp/ChangePass.jsp").forward(request, response);
+                        session.setAttribute("mess_p", "Input cannot be null ");
+                        request.getRequestDispatcher("/views/ChangePass.jsp").forward(request, response);
                         return;
                     }
-                    if (!daoThanh.encrypt(PassNow).equals(Loged.getPass())) {
+                    if (!PassNow.equals(Loged.getPass())) {
 
                         request.setAttribute("PassNow", PassNow);
                         request.setAttribute("passNew", passNew);
                         request.setAttribute("re_pass", re_pass);
 
-                        session.setAttribute("mess_p", "Your new password not same with your old password");
-                        request.getRequestDispatcher("/jsp/ChangePass.jsp").forward(request, response);
+                        session.setAttribute("mess_p", "Your current password is incorrect");
+                        request.getRequestDispatcher("/views/ChangePass.jsp").forward(request, response);
                         return;
                     }
 
@@ -85,28 +81,69 @@ public class ChangePassWordController extends HttpServlet {
                         request.setAttribute("re_pass", re_pass);
 
                         session.setAttribute("mess_p", "New pass and re-pass are not the same");
-                        request.getRequestDispatcher("/jsp/ChangePass.jsp").forward(request, response);
+                        request.getRequestDispatcher("/views/ChangePass.jsp").forward(request, response);
                         return;
                     }
-                    if (daoThanh.encrypt(passNew).equals(Loged.getPass())) {
+                    if (passNew.equals(Loged.getPass())) {
 
                         request.setAttribute("PassNow", PassNow);
                         request.setAttribute("passNew", passNew);
                         request.setAttribute("re_pass", re_pass);
 
-                        session.setAttribute("mess_p", "Old password and new password are not the same");
-                        request.getRequestDispatcher("/jsp/ChangePass.jsp").forward(request, response);
+                        session.setAttribute("mess_p", "Old password and new password cannot not the same");
+                        request.getRequestDispatcher("/views/ChangePass.jsp").forward(request, response);
                         return;
                     }
-                    if (daoThanh.encrypt(PassNow).equals(Loged.getPass()) && passNew.equals(re_pass)) {
+                    if (PassNow.equals(Loged.getPass()) && passNew.equals(re_pass)) {
 
                         daoThanh.UpdatePass(re_pass, Loged.getUser_id());
                         session.setAttribute("ok", 1);
                         session.setAttribute("mess_p", "Your pass has been changed");
-                        request.getRequestDispatcher("/jsp/ChangePass.jsp").forward(request, response);
+                        request.getRequestDispatcher("/views/ChangePass.jsp").forward(request, response);
                     }
                 }
             }
         }
     }
+
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
+
 }
+
