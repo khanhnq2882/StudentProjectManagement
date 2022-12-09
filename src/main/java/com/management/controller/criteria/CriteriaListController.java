@@ -18,7 +18,7 @@ import java.util.List;
  *
  * @author Admin
  */
-@WebServlet(name = "Criteria", urlPatterns = {"/Criteria"})
+@WebServlet(name = "CriteriaListController", urlPatterns = {"/Criteria"})
 public class CriteriaListController extends HttpServlet {
 
     /**
@@ -61,15 +61,46 @@ public class CriteriaListController extends HttpServlet {
             List<Criteria> listCri = dao.viewSubjectId();
             request.setAttribute("subjectList", listCri);
             //  out.print(listCri);
-            request.setAttribute("CriteriaList", list);
-            request.getRequestDispatcher("/jsp/Criteria/CriteriaList.jsp").forward(request, response);
+            request.setAttribute("CriteriaListController", list);
+            request.getRequestDispatcher("/views/CriteriaList.jsp").forward(request, response);
 
             if (service.equals("updateStatus")) {
                 int status = Integer.parseInt(request.getParameter("status"));
                 String criId = request.getParameter("criId");
                 int n = dao.updateStatus(criId, status);
-                response.sendRedirect("Criteria");
+                response.sendRedirect("views");
             }
         }
     }
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
+
 }
+

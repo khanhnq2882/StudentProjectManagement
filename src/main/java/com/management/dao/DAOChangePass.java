@@ -101,7 +101,7 @@ public class DAOChangePass extends ConnectJDBC {
 
     public int UpdatePass(String pass, int id) {
         int n = 0;
-        String sql = "update user set pass = '" + encrypt(pass) + "'"
+        String sql = "update user set pass = '" + pass + "'"
                 + " where user_id = '" + id + "'";
         try {
             Statement state = getConnection().createStatement();
