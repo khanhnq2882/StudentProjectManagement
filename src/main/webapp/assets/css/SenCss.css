@@ -108,11 +108,12 @@ h5:hover {
 }
 .container ul,
 .container-fluid ul{
+    justify-content: center;
+    flex-wrap: wrap;
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
+    column-count: 3;
     align-content: stretch;
 }
 .container li,

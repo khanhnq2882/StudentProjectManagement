@@ -19,7 +19,7 @@ public class Extracted {
             lastPage++;
         }
 
-        request.setAttribute("index", index);
+        request.setAttribute("indexPage", index);
         request.setAttribute("lastPage", lastPage);
         request.setAttribute("countResult", count);
 

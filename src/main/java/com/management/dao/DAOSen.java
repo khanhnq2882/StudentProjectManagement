@@ -39,6 +39,22 @@ public class DAOSen extends ConnectJDBC {
         return null;
     }
 
+    public String decrypt(String strToDecrypt) { // giai ma
+        try {
+            MessageDigest sha = MessageDigest.getInstance("SHA-1");
+            byte[] key = secretKey.getBytes("UTF-8");
+            key = sha.digest(key);
+            key = Arrays.copyOf(key, 16);
+            SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5PADDING");
+            cipher.init(Cipher.DECRYPT_MODE, secretKey);
+            return new String(cipher.doFinal(Base64.getDecoder().decode(strToDecrypt)));
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+        return null;
+    }
+
     public String RandomBullSh() {
         String result = "";
         Random rand = new Random();
@@ -350,11 +366,11 @@ public class DAOSen extends ConnectJDBC {
         return list;
     }
 
-    public int countSubject(String status) {
+    public int countSubject(String filter) {
         int count = 0;
         String sql = "select count(*) from subject";
-        if(!status.equals("")) {
-            sql += "\nwhere status = " + status;
+        if(!filter.equals("")) {
+            sql += "\nwhere " + filter;
         }
         ResultSet rs = getData(sql);
         try {

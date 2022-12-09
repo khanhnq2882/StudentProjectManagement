@@ -1,3 +1,4 @@
+<%@ page import="com.management.util.EncodeSring" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -29,53 +30,55 @@
                         <a href="ClassUser"> List all Subject </a>
                     </div>
                 </div>
-                <span style="margin-top: 100px">${arr}</span>
-                <form name="<%=request.getContextPath()%>/SearchSubject?action=search" method="post">
-                    <input style="margin-top: 4rem" class="form-control form-control-user mx-3"
-                           name="subjectCode" type="text" value="${subjectCode}"
-                           placeholder="Input a subject ...">
-                    <ul style="justify-content: flex-start;">
-                        <li>
+                <form action="<%=request.getContextPath()%>/SubjectList?action=search" method="post"
+                      style="margin-top: 90px; margin-bottom: 25px; ">
+                    <div class="d-flex align-items-end">
+                        <div class="mr-4" style="width: 350px;">
+                            <input class="form-control form-control-user"
+                                   name="subjectCode" type="text" value="${subjectCode}"
+                                   placeholder="Input a subject/subject code ...">
+                        </div>
+                        <div class="mr-4">
                             <span>Filter by Author</span>
                             <select class="form-control form-control-user" name="authorId" style="width: auto">
-                                <option selected disabled>Select a option</option>
+                                <option selected disabled>Select Author</option>
+                                <option ${authorId == "" ? "selected" : ""} value="">All</option>
                                 <c:forEach var="o" items="${listAuthor}">
                                     <option ${authorId == o.user_id ? "selected" : ""}
                                             value="${o.user_id}">${o.fullname}</option>
                                 </c:forEach>
                             </select>
-                        </li>
+                        </div>
                         <c:if test="${Loged.role_id == 4}">
-                            <li>
+                            <div class="mr-4">
                                 <span>Filter by Status</span>
                                 <select class="form-control form-control-user" name="status" style="width: auto">
-                                    <option selected disabled>Select a option</option>
+                                    <option selected disabled>Select status</option>
+                                    <option value="" ${status == "" ? "selected" : ""}>All</option>
                                     <option value="1" ${status == 1 ? "selected" : ""}>Active</option>
                                     <option value="2" ${status == 2 ? "selected" : ""}>InActive</option>
                                 </select>
-                            </li>
+                            </div>
                         </c:if>
-                    </ul>
+                        <div class="mr-4">
+                            <button type="submit" class="btn btn-primary">Search</button>
+                        </div>
+                    </div>
                 </form>
-                <div class="a adddbtn">
-                    <c:if test="${Loged.role_id == 4}">
-<%--                        <a><ion-icon name="add-circle-outline" data-toggle="modal" data-target="#addModal"></ion-icon>Add new Subject</a>--%>
-                        <a class="font-weight-bold text-primary" type="button" data-toggle="modal" data-target="#addModal">Add new subject</a>
-                    </c:if>
-                </div>
-                <input id="het" type="hidden" value="">
+                <c:if test="${Loged.role_id == 4}">
+                    <a class="font-weight-bold text-primary" type="button" data-toggle="modal" data-target="#addModal">Add
+                        new subject</a><br>
+                </c:if>
+                <span class="spn">${countResult} Subject(s) found</span>
                 <ul id="slide">
-                    <span class="spn">${count} Subject(s) found</span>
-                    <input oninput="searchByName(this)" class="search form-control form-control-user" name="txt"
-                           type="hidden" value=""
-                           placeholder="Search mã môn hoặc tên môn học ở đây">
                     <c:forEach var="o" items="${list}">
                         <li>
                             <div class="count box">
                                 <a href="ShowAllClass?go=showBySubject&subjectId=${o.subject_id}"
                                    style="color: black"><h5 class="two-lines">
                                     (${o.subject_code}) ${o.subject_name}</h5></a>
-                                <span><ion-icon name="person"></ion-icon> Author: ${DAOSen.getUserById(o.author_id).fullname}</span><br>
+                                <span><ion-icon
+                                        name="person"></ion-icon> Author: ${DAOSen.getUserById(o.author_id).fullname}</span><br>
                                 <span> <c:if
                                         test="${o.status == 1}"></c:if> Status: ${o.status == 1 ? "Active" : "Not Active"}</span><br>
                                 <div class="aa">
@@ -92,19 +95,81 @@
                     </c:forEach>
                 </ul>
             </div>
+
+            <%
+                String subjectCode = "";
+                String authorId = "";
+                String status = "";
+
+                if (request.getParameter("subjectCode") != null) {
+                    subjectCode = request.getParameter("subjectCode");
+                }
+                if (request.getParameter("authorId") != null) {
+                    authorId = request.getParameter("authorId");
+                }
+                if (request.getParameter("status") != null) {
+                    status = request.getParameter("status");
+                }
+
+                StringBuilder paramPaginate = new StringBuilder();
+
+                if (!subjectCode.equals("")) {
+                    if (!paramPaginate.toString().equals("")) {
+                        paramPaginate.append("&");
+                    }
+                    paramPaginate.append("subjectCode=" + subjectCode);
+                }
+                if (!authorId.equals("")) {
+                    if (!paramPaginate.toString().equals("")) {
+                        paramPaginate.append("&");
+                    }
+                    paramPaginate.append("authorId=" + authorId);
+                }
+                if (!status.equals("")) {
+                    if (!paramPaginate.toString().equals("")) {
+                        paramPaginate.append("&");
+                    }
+                    paramPaginate.append("status=" + status);
+                }
+
+                String encodeStr = EncodeSring.encode(paramPaginate.toString());
+            %>
+
             <nav aria-label="...">
                 <ul class="pagination justify-content-end" style="padding-right: 7rem;">
-                    <li class="page-item disabled">
-                        <span class="page-link">Previous</span>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item active">
-                        <span class="page-link">2<span class="sr-only">(current)</span></span>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">Next</a>
-                    </li>
+                    <c:if test="${lastPage<1 || lastPage < indexPage}">
+                        <h1>Not found</h1>
+                    </c:if>
+                    <c:if test="${lastPage >= 1}">
+                        <li class="page-item ${indexPage eq 1 ? "disabled" : ""}">
+                            <c:if test="${indexPage eq 1}">
+                                <span class="page-link">Previous</span>
+                            </c:if>
+                            <c:if test="${indexPage ne 1}">
+                                <a class="page-link" href="<%=request.getContextPath()%>/SubjectList?param=<%=encodeStr%>">Previous</a>
+                            </c:if>
+                        </li>
+
+                        <c:forEach begin="1" end="${lastPage}" var="i">
+                            <li class="page-item ${i eq indexPage ? "active" : ""}">
+                                <c:if test="${i eq indexPage}">
+                                    <span class="page-link">${i}<span class="sr-only">(current)</span></span>
+                                </c:if>
+                                <c:if test="${i ne indexPage}">
+                                    <a class="page-link" href="<%=request.getContextPath()%>/SubjectList?param=<%=encodeStr%>">${i}</a>
+                                </c:if>
+                            </li>
+                        </c:forEach>
+
+                        <li class="page-item ${indexPage eq lastPage ? "disabled" : ""}">
+                            <c:if test="${indexPage eq lastPage}">
+                                <span class="page-link">Next</span>
+                            </c:if>
+                            <c:if test="${indexPage ne lastPage}">
+                                <a class="page-link" href="<%=request.getContextPath()%>/SubjectList?param=<%=encodeStr%>">Next</a>
+                            </c:if>
+                        </li>
+                    </c:if>
                 </ul>
             </nav>
         </div>
