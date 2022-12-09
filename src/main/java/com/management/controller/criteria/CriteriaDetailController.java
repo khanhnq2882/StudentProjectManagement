@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-@WebServlet(name = "CriteriaDetail", urlPatterns = {"/CriteriaDetail"})
+@WebServlet(name = "CriteriaDetailController", urlPatterns = {"/CriteriaDetail"})
 public class CriteriaDetailController extends HttpServlet {
 
     /**
@@ -54,7 +54,7 @@ public class CriteriaDetailController extends HttpServlet {
                 request.setAttribute("iter", iterID);
                 //request.setAttribute("sub", subID);
 //              out.print(iterID);
-                request.getRequestDispatcher("/jsp/Criteria/CriteriaDetails.jsp").forward(request, response);
+                request.getRequestDispatcher("/views/CriteriaDetails.jsp").forward(request, response);
             }
 
             if (service.equals("updateCriteria")) {
@@ -76,14 +76,14 @@ public class CriteriaDetailController extends HttpServlet {
                 request.setAttribute("title", "Update thành công");
                 request.setAttribute("message", "Vua update duoc roi day!");
                 request.setAttribute("theme", "Success");
-                request.getRequestDispatcher("Criteria").forward(request, response);
+                request.getRequestDispatcher("criteria").forward(request, response);
 
             }
 
             if (service.equals("Delete")) {
                 int cid = Integer.parseInt(request.getParameter("cid"));
                 Criteria c = dao.getDelete(cid);
-                response.sendRedirect("Criteria");
+                response.sendRedirect("criteria");
             }
             if (service.equals("add")) {
                 //   List<Criteria> listSubId = dao.viewSubjectCode();
@@ -92,7 +92,7 @@ public class CriteriaDetailController extends HttpServlet {
                 List<Criteria> listIterId = dao.viewIterName();
                 request.setAttribute("IterList", listIterId);
 //                out.print(listIterId);
-                request.getRequestDispatcher("/jsp/Criteria/AddCriteria.jsp").forward(request, response);
+                request.getRequestDispatcher("/views/AddCriteria.jsp").forward(request, response);
             }
             if (service.equals("addCriteria")) {
                 int iteration_id = Integer.parseInt(request.getParameter("iteration"));
@@ -112,7 +112,7 @@ public class CriteriaDetailController extends HttpServlet {
                         request.setAttribute("title", "Add thành công");
                         request.setAttribute("message", "Vua add duoc roi day!");
                         request.setAttribute("theme", "Success");
-                        request.getRequestDispatcher("Criteria").forward(request, response);
+                        request.getRequestDispatcher("criteria").forward(request, response);
                     }
                 } else {
                     if (!loc.matches("^\\d+$")) {
@@ -142,11 +142,42 @@ public class CriteriaDetailController extends HttpServlet {
                     List<Criteria> listIterId = dao.viewIterName();
                     request.setAttribute("IterList", listIterId);
 //                out.print(listIterId);
-                    request.getRequestDispatcher("/jsp/Criteria/AddCriteria.jsp").forward(request, response);
+                    request.getRequestDispatcher("/views/AddCriteria.jsp").forward(request, response);
                 }
             }
         } catch (Exception e) {
             request.getRequestDispatcher("404.html").forward(request, response);
         }
     }
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
+
 }
+

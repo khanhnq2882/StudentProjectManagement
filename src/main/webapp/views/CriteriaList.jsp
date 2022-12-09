@@ -37,7 +37,7 @@
 <div id="wrapper">
 
     <!-- Sidebar -->
-    <jsp:include page="../Sidebar.jsp"></jsp:include>
+    <jsp:include page="/general/Sidebar.jsp"></jsp:include>
     <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
@@ -47,7 +47,7 @@
         <div id="content">
 
             <!-- Topbar -->
-            <jsp:include page="../Header.jsp"></jsp:include>
+            <jsp:include page="/general/Header.jsp"></jsp:include>
             <!-- End of Topbar -->
             <!-- Begin Page Content -->
             <div class="container-fluid">
@@ -110,7 +110,7 @@
                                         </td>
                                         <td>${o.criteria_order}</td>
                                         <td>
-                                            <form id="idS${o.criteria_id}" action="Criteria?go=updateStatus" method="POST">
+                                            <form id="idS${o.criteria_id}" action="?go=updateStatus" method="POST">
                                                 <input type="hidden" name="criId" value="${o.criteria_id}">
                                                 <select class="form-control form-control-user" name="status" onchange="submitForm(idS${o.criteria_id})" >
                                                     <option ${o.status == 2 ? "selected" : ""} value="2">Deactivate</option>
@@ -131,7 +131,7 @@
                             <div class="paging" >
 
                                 <c:forEach begin="1" end="${maxP}" var="i"  >
-                                    <a class ="active" href="Criteria?index=${i}">${i}</a>
+                                    <a class ="active" href="?index=${i}">${i}</a>
                                 </c:forEach>
 
                             </div>
@@ -167,7 +167,7 @@
     <i class="fas fa-angle-up"></i>
 </a>
 <!-- Logout Modal-->
-<jsp:include page="../LogOut.jsp"></jsp:include>
+<jsp:include page="/general/LogOut.jsp"></jsp:include>
 
 <!-- Bootstrap core JavaScript-->
 <script src="vendor/jquery/jquery.min.js"></script>
