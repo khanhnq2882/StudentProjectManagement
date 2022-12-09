@@ -36,20 +36,15 @@
 <!-- Page Wrapper -->
 <div id="wrapper">
 
-    <!-- Sidebar -->
     <jsp:include page="/general/Sidebar.jsp"></jsp:include>
-    <!-- End of Sidebar -->
 
-    <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
 
         <!-- Main Content -->
         <div id="content">
 
-            <!-- Topbar -->
             <jsp:include page="/general/Header.jsp"></jsp:include>
-            <!-- End of Topbar -->
-            <!-- Begin Page Content -->
+
             <div class="container-fluid">
 
                 <h1 style="font-weight: bold" class="h3 mb-2 text-gray-800"> Criteria List</h1>
@@ -166,7 +161,6 @@
 <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
 </a>
-<!-- Logout Modal-->
 <jsp:include page="/general/LogOut.jsp"></jsp:include>
 
 <!-- Bootstrap core JavaScript-->
