@@ -37,7 +37,7 @@
                     <h6 class="collapse-header">Admin Setting:</h6>
                     <a class="collapse-item" href="SettingListServlet">Setting</a>
                     <a class="collapse-item" href="UserController">User</a>
-                    <a class="collapse-item" href="SubjectList">Subject</a>
+                    <a class="collapse-item" href="SubjectManagement">Subject</a>
                     <a class="collapse-item" href="ShowAllClass">Class</a>
                 </div>
             </div>

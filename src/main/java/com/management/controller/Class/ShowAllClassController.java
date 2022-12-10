@@ -5,6 +5,8 @@ import com.management.dao.DAOSen;
 import com.management.entity.Class_s;
 import com.management.entity.Subject;
 import com.management.entity.User;
+import com.management.util.Alert;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -16,8 +18,8 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.Vector;
 
-@WebServlet(name = "ShowAllClass", urlPatterns = {"/ShowAllClass"})
-public class ShowAllClass extends HttpServlet {
+@WebServlet(name = "ShowAllClassController", urlPatterns = {"/ShowAllClass"})
+public class ShowAllClassController extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -130,7 +132,6 @@ public class ShowAllClass extends HttpServlet {
 
                         request.setAttribute("mess", "Not allow null");
                         request.getRequestDispatcher("/views/AddClass.jsp").forward(request, response);
-                        return;
                     }
                     if (dao.checkClassCode(class_code)) {
                         request.setAttribute("class_code", class_code);
@@ -146,14 +147,13 @@ public class ShowAllClass extends HttpServlet {
 
                         request.setAttribute("mess", "This class is already exist");
                         request.getRequestDispatcher("/views/AddClass.jsp").forward(request, response);
-                        return;
                     }
 
                     Class_s clas = new Class_s(0, class_code, trainer, subject, class_Year, class_term, block5, Integer.parseInt(status));
                     dao.addClass(clas);
 
-                    request.setAttribute("link", "ShowAllClass");
-                    request.getRequestDispatcher("/views/Success.jsp").forward(request, response);
+                    request.setAttribute("alert", new Alert().alert("", "Add new class successfully!", Alert.SUCCESS));
+                    request.getRequestDispatcher("/views/AddClass.jsp").forward(request, response);
                 }
             }
             if (service.equals("updateClass")) {
@@ -209,8 +209,8 @@ public class ShowAllClass extends HttpServlet {
                     else {
                         Class_s s = new Class_s(Integer.parseInt(classId), class_code, trainer, subject, class_Year, class_term, block5, Integer.parseInt(status));
                         dao.updateAllClass(s);
-                        request.setAttribute("link", "ShowAllClass");
-                        request.getRequestDispatcher("/views/Success.jsp").forward(request, response);
+                        request.setAttribute("alert", new Alert().alert("", "Update class successfully!", Alert.SUCCESS));
+                        request.getRequestDispatcher("/views/AddClass.jsp").forward(request, response);
                     }
 
                 }
