@@ -49,9 +49,9 @@ public class DAOCriteria extends ConnectJDBC{
     }
     public List<Criteria> viewSubjectId() {
         List<Criteria> list = new ArrayList<>();
-        String sql = "select distinct at.subject_id,at.subject_code "
-                + "from evaluation_criteria ar join iteration ac join subject at "
-                + "on ar.iteration_id = ac.iteration_id and ac.subject_id=at.subject_id order by subject_name";
+        String sql = "select distinct at.subject_id,at.subject_code , subject_name\n" +
+                "           from evaluation_criteria ar join iteration ac join subject at \n" +
+                "             on ar.iteration_id = ac.iteration_id and ac.subject_id=at.subject_id order by subject_name";
         ResultSet rs = getData(sql);
         try {
             while (rs.next()) {
