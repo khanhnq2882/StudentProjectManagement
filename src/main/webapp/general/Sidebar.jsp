@@ -1,8 +1,3 @@
-<%-- 
-    Document   : Sidebar
-    Created on : May 20, 2022, 6:16:29 PM
-    Author     : asus
---%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" style="z-index: 10" id="accordionSidebar">
@@ -10,7 +5,7 @@
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="Home">
         <div class="sidebar-brand-icon rotate-n-15">
-            <img src="<c:url value="/assets/img/logo-university.png"/>" style="max-height: 50px; border-radius: 5px;">
+            <img src="<c:url value="/assets/img/logo-university.png"/>" style="max-height: 50px; border-radius: 5px; object-fit: cover;">
         </div>
         <div class="sidebar-brand-text mx-3">Group 1 Project</div>
     </a>

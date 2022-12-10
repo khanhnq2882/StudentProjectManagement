@@ -6,26 +6,17 @@
 
 <body id="page-top">
 
-
-<!-- Page Wrapper -->
 <div id="wrapper">
 
-    <!-- Sidebar -->
     <jsp:include page="/general/Sidebar.jsp"></jsp:include>
-    <!-- End of Sidebar -->
 
-    <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
 
         <!-- Main Content -->
         <div id="content">
 
-            <!-- Topbar -->
             <jsp:include page="/general/Header.jsp"></jsp:include>
-            <!-- End of Topbar -->
 
-            <!-- Begin Page Content -->
-            <!--                        doi mat khau-->
             <div class="container">
                 <div class="card o-hidden border-0 shadow-lg my-5">
                     <div class="card-body p-0">
@@ -123,7 +114,6 @@
     <i class="fas fa-angle-up"></i>
 </a>
 
-<!-- Logout Modal-->
 <jsp:include page="/general/LogOut.jsp"></jsp:include>
 
 <jsp:include page="/general/Footer.jsp"/>

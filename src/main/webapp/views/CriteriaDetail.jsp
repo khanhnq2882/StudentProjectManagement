@@ -55,19 +55,15 @@
 </style>
 <div id="wrapper">
 
-  <!-- Sidebar -->
   <jsp:include page="/general/Sidebar.jsp"></jsp:include>
-  <!-- End of Sidebar -->
 
-  <!-- Content Wrapper -->
   <div id="content-wrapper" class="d-flex flex-column">
 
     <!-- Main Content -->
     <div id="content">
 
-      <!-- Topbar -->
       <jsp:include page="/general/Header.jsp"></jsp:include>
-      <!-- End of Topbar -->
+
       <%
         ArrayList<Criteria> vect = (ArrayList<Criteria>) request.getAttribute("IterList");
 
@@ -168,7 +164,6 @@
   <i class="fas fa-angle-up"></i>
 </a>
 
-<!-- Logout Modal-->
 <jsp:include page="/general/LogOut.jsp"></jsp:include>
 
 <!-- Bootstrap core JavaScript-->

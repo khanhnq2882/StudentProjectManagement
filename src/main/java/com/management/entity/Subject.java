@@ -8,8 +8,18 @@ public class Subject {
     private int author_id;
     private String author_name;
     private int status;
+    private String description;
 
     public Subject() {
+    }
+
+    public Subject(int subject_id, String subject_code, String subject_name, int author_id, int status, String description) {
+        this.subject_id = subject_id;
+        this.subject_code = subject_code;
+        this.subject_name = subject_name;
+        this.author_id = author_id;
+        this.status = status;
+        this.description = description;
     }
 
     public Subject(int subject_id, String subject_code, String subject_name, String author_name, int status) {

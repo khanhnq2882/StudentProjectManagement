@@ -38,8 +38,8 @@
                                     </div>
                                     <div class="text-center">
                                         <br>
-                                        <img src="<c:url value="/assets/img/${Loged.avatar_link}"/>"
-                                             style="border-radius: 50%; width: 250px; height: 250px;" class="avatar img-circle img-thumbnail mb-3"
+                                        <img src="<c:url value="/uploads/${Loged.avatar_link}"/>"
+                                             style="border-radius: 50%; width: 250px; height: 250px; object-fit: cover;" class="avatar img-circle img-thumbnail mb-3"
                                              alt="avatar">
                                         <h6>Upload a different photo...</h6>
                                         <span style="color: red">${haizz}</span>
@@ -69,7 +69,7 @@
                                             <div class="col-sm-12 mb-6 mb-sm-0">
                                                 <label>Gender: </label>
                                                 <select name="gender" class="Gender">
-                                                    <option value="0" ${Loged.gender == 0 ? "selected" : ""}>Gender
+                                                    <option value="0" ${Loged.gender == 0 ? "selected" : ""} disabled>Gender
                                                     </option>
                                                     <option value="1" ${Loged.gender == 1 ? "selected" : ""}>Male
                                                     </option>
