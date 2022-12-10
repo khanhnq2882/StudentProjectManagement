@@ -18,8 +18,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 
-@WebServlet(name = "SubjectListController", value = "/SubjectList")
-public class SubjectListController extends HttpServlet {
+@WebServlet(name = "SubjectManagementController", value = "/SubjectManagement")
+public class SubjectManagementController extends HttpServlet {
 
     DAOSen daoSen = new DAOSen();
     DAOChangePass daoChangePass = new DAOChangePass();
@@ -83,7 +83,7 @@ public class SubjectListController extends HttpServlet {
         request.setAttribute("authorId", authorId);
         request.setAttribute("status", status);
 
-        request.getRequestDispatcher("views/SubjectList.jsp").forward(request, response);
+        request.getRequestDispatcher("views/SubjectManagement.jsp").forward(request, response);
     }
 
     @Override

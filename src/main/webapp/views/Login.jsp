@@ -70,7 +70,5 @@
 
 <jsp:include page="/general/Footer.jsp"/>
 
-${alert eq null ? "" : alert}
-
 </body>
 </html>

@@ -2,6 +2,7 @@ package com.management.controller;
 
 import com.management.dao.DAOSen;
 import com.management.entity.User;
+import com.management.util.AbstractConstants;
 import com.management.util.Alert;
 
 import javax.mail.MessagingException;
@@ -58,9 +59,11 @@ public class ForgotPasswordController extends HttpServlet {
                         + "\n"
                         + "</html>";
                 try {
-                    dao.send(email, subject, message, "tungnguyenn050499@gmail.com", "lwiyewmvqqmsaxaj");
+                    dao.send(email, subject, message, AbstractConstants.EMAIL_USERNAME, AbstractConstants.EMAIL_PASSWORD);
                 } catch (MessagingException e) {
                     e.printStackTrace();
+                    request.getRequestDispatcher("views/404.html").forward(request, response);
+                    return;
                 }
                 dao.ChangePassbyEmail(email, code);
                 request.setAttribute("alert", new Alert().alert("", "A new password was send to your email!", Alert.SUCCESS));

@@ -31,7 +31,7 @@
                         <a href="ClassUser"> List all Subject </a>
                     </div>
                 </div>
-                <form action="<%=request.getContextPath()%>/SubjectList?action=search" method="post"
+                <form action="<%=request.getContextPath()%>/SubjectManagement?action=search" method="post"
                       style="margin-top: 90px; margin-bottom: 25px; ">
                     <div class="d-flex align-items-end">
                         <div class="mr-4" style="width: 350px;">
@@ -138,7 +138,7 @@
                                 <span class="page-link">Previous</span>
                             </c:if>
                             <c:if test="${indexPage ne 1}">
-                                <a class="page-link" href="<%=request.getContextPath()%>/SubjectList?<%=paramPaginateUrl%>index=${indexPage - 1}">Previous</a>
+                                <a class="page-link" href="<%=request.getContextPath()%>/SubjectManagement?<%=paramPaginateUrl%>index=${indexPage - 1}">Previous</a>
                             </c:if>
                         </li>
 
@@ -148,7 +148,7 @@
                                     <span class="page-link">${i}<span class="sr-only">(current)</span></span>
                                 </c:if>
                                 <c:if test="${i ne indexPage}">
-                                    <a class="page-link" href="<%=request.getContextPath()%>/SubjectList?<%=paramPaginateUrl%>index=${i}">${i}</a>
+                                    <a class="page-link" href="<%=request.getContextPath()%>/SubjectManagement?<%=paramPaginateUrl%>index=${i}">${i}</a>
                                 </c:if>
                             </li>
                         </c:forEach>
@@ -158,7 +158,7 @@
                                 <span class="page-link">Next</span>
                             </c:if>
                             <c:if test="${indexPage ne lastPage}">
-                                <a class="page-link" href="<%=request.getContextPath()%>/SubjectList?<%=paramPaginateUrl%>index=${indexPage + 1}">Next</a>
+                                <a class="page-link" href="<%=request.getContextPath()%>/SubjectManagement?<%=paramPaginateUrl%>index=${indexPage + 1}">Next</a>
                             </c:if>
                         </li>
                     </c:if>
@@ -181,7 +181,7 @@
 <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <form action="<%=request.getContextPath()%>/SubjectList?action=add" method="post">
+        <form action="<%=request.getContextPath()%>/SubjectManagement?action=add" method="post">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
@@ -193,11 +193,11 @@
                     <ul>
                         <li class="mb-3">
                             <input oninput="validationCode()" id="scode" class="form-control form-control-user"
-                                   type="text" name="scode" placeholder="Subject Code ..." required/>
+                                   type="text" name="scode" placeholder="Subject Code ..." maxlength="3" required/>
                         </li>
                         <li class="mb-3">
                             <input oninput="validationName()" id="sname" class="form-control form-control-user"
-                                   type="text" name="sname" placeholder="Subject Name ..." required/>
+                                   type="text" name="sname" placeholder="Subject Name ..." maxlength="155" required/>
                         </li>
                         <li class="mb-3">
                             <select onchange="validateAuthor()" name="aname"
@@ -243,8 +243,6 @@
         })
     });
 </script>
-
-${alert eq null ? "" : alert}
 
 </body>
 
