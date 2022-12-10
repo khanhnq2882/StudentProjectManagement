@@ -24,7 +24,10 @@ public class CriteriaListController extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
+
         HttpSession session = request.getSession();
         User Loged = (User) session.getAttribute("Loged");
         if (Loged == null) {
@@ -33,7 +36,7 @@ public class CriteriaListController extends HttpServlet {
         }
         String service = request.getParameter("go");
 
-        try (PrintWriter out = response.getWriter()) {
+        try {
             /* TODO output your page here. You may use following sample code. */
 
             String submit = request.getParameter("submit");
@@ -62,6 +65,9 @@ public class CriteriaListController extends HttpServlet {
                 int n = dao.updateStatus(criId, status);
                 response.sendRedirect("Criteria");
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.getRequestDispatcher("views/404.html").forward(request, response);
         }
     }
 

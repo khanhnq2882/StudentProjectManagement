@@ -1,5 +1,5 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page contentType="text/html" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
 
@@ -136,24 +136,24 @@
 
 <jsp:include page="/general/Footer.jsp"></jsp:include>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        Fnon.Hint.Init({
-            zIndex: 9900,
-        });
-        // Hint
-        var message = "${message}";
-        var theme = "${theme}";
-        var title = "${title}";
-        var position = "right-top";
-        var animation = "slide-left";
-        Fnon.Hint[theme](message, {
-            title,
-            position,
-            animation,
-        })
-    });
-</script>
+<%--<script>--%>
+<%--    document.addEventListener('DOMContentLoaded', function () {--%>
+<%--        Fnon.Hint.Init({--%>
+<%--            zIndex: 9900,--%>
+<%--        });--%>
+<%--        // Hint--%>
+<%--        var message = "${message}";--%>
+<%--        var theme = "${theme}";--%>
+<%--        var title = "${title}";--%>
+<%--        var position = "right-top";--%>
+<%--        var animation = "slide-left";--%>
+<%--        Fnon.Hint[theme](message, {--%>
+<%--            title,--%>
+<%--            position,--%>
+<%--            animation,--%>
+<%--        })--%>
+<%--    });--%>
+<%--</script>--%>
 <script>
     function submitForm(form) {
         swal({
