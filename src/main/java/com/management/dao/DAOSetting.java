@@ -153,4 +153,18 @@ public class DAOSetting extends ConnectJDBC {
         return n;
     }
 
+    public Setting SearchSetID(String s) {
+        List<Setting> list = new ArrayList<>();
+        String sql = "select * from setting where setting_id = " + s;
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                return new Setting(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(6), rs.getString(7));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
 }
