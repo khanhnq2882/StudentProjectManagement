@@ -110,20 +110,22 @@ public class DAOTeam extends ConnectJDBC {
         }
         return list;
     }
-    public List<Team> viewTeamList(String i) {
+
+    public List<Team> viewTeamList(String classId) {
         List<Team> list = new ArrayList<>();
-        String sql = "SELECT * FROM team a inner join class b on a.class_id = b.class_id where a.class_id ="+ i +"";
+        String sql = "select * from team where class_id = "+ classId +"";
         ResultSet rs = getData(sql);
         try {
             while (rs.next()) {
-                list.add(new Team(rs.getInt(1), getClassName2(rs.getString(2)), rs.getString(3), rs.getString(4), rs.getString(5),
-                        rs.getInt(6), getLeaderName2(rs.getString(7))));
+                list.add(new Team(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
+                        rs.getInt(6), rs.getString(7)));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
         return list;
     }
+
     public String getClassName2(String classes) {
         String sql = "select distinct b.class_code from team a inner join class b on a.class_id = b.class_id where a.class_id = " + classes;
         ResultSet rs = getData(sql);
@@ -232,5 +234,4 @@ public class DAOTeam extends ConnectJDBC {
         }
         return list;
     }
-
 }
