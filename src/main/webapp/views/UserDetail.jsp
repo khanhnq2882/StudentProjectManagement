@@ -1,5 +1,11 @@
-
-
+<%--
+  Created by IntelliJ IDEA.
+  User: hp
+  Date: 12/12/2022
+  Time: 6:20 PM
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -13,9 +19,8 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>G1 - ClassList</title>
+  <title>G1 - User Detail</title>
 
-  <link href="./css/styleUser.css" rel="stylesheet">
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link
@@ -30,18 +35,15 @@
 
 <body id="page-top">
 
+<%
 
-<style>
-  .container{
-    text-align: center;
-  }
-</style>
+%>
+
 <!-- Page Wrapper -->
 <div id="wrapper">
 
   <!-- Sidebar -->
   <jsp:include page="../general/Sidebar.jsp"></jsp:include>
-
   <!-- End of Sidebar -->
 
   <!-- Content Wrapper -->
@@ -52,71 +54,11 @@
 
       <!-- Topbar -->
       <jsp:include page="../general/Header.jsp"></jsp:include>
-
       <!-- End of Topbar -->
 
       <!-- Begin Page Content -->
-
-
-
       <div class="container">
 
-        <div class="d-sm-flex align-items-center justify-content-between mb-4">
-          <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-          <a href="ExcelTest?ClassId=${classid}"
-             class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                  class="fas fa-download fa-sm text-white-50"></i>Download list user</a>
-        </div>
-
-        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-          <thead>
-          <tr>
-
-            <th>Roll Number</th>
-            <th>Image</th>
-            <th>FullName</th>
-            <th>Gender</th>
-            <th>Date of Birth</th>
-            <th>Email</th>
-            <th>Mobile</th>
-            <th>Status</th>
-          </tr>
-          </thead>
-          <tbody>
-          <c:forEach var="o" items="${listByClass}">
-            <tr>
-              <td>${o.roll_number}</td>
-              <td>
-                <img src="${o.avatar_link}" alt="${o.fullname}" style="height: 4%; width: 4%;vertical-align: middle;">
-
-              </td>
-              <td>${o.fullname}</td>
-              <td>
-                <c:if test="${o.gender == 1}">
-                  <% out.print("Female"); %>
-                </c:if>
-                <c:if test="${o.gender == 2}">
-                  <% out.print("Male"); %>
-                </c:if>
-              </td>
-
-              <td>${o.date_of_birth}</td>
-              <td>${o.email}</td>
-              <td>${o.mobile}</td>
-              <td>
-                <form action="UserController?go=changeStatusClass" method="POST">
-                  <input type="hidden" name="userID" value="${o.user_id}"/>
-                  <input type="hidden" name="class_ID" value="${classid}"/>
-                  <select name="status" onchange="this.form.submit()">
-                    <option ${o.status == 0 ? "selected" : ""} value="0">Deactive</option>
-                    <option ${o.status == 1 ? "selected" : ""} value="1">Active</option>
-                  </select>
-                </form>
-              </td>
-            </tr>
-          </c:forEach>
-          </tbody>
-        </table>
       </div>
       <!-- /.container-fluid -->
 
@@ -146,7 +88,6 @@
 
 <!-- Logout Modal-->
 <jsp:include page="../views/LogOut.jsp"></jsp:include>
-
 
 <!-- Bootstrap core JavaScript-->
 <script src="vendor/jquery/jquery.min.js"></script>
