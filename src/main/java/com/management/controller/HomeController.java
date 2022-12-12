@@ -2,7 +2,7 @@ package com.management.controller;
 
 import com.management.dao.DAOChangePass;
 import com.management.dao.DAOSen;
-import com.management.entity.ClassUser;
+import com.management.entity.classUser;
 import com.management.entity.Class_s;
 import com.management.entity.User;
 
@@ -34,7 +34,7 @@ public class HomeController extends HttpServlet {
                 request.getRequestDispatcher("Login_sen").forward(request, response);
                 return;
             }
-            List<ClassUser> listCU = daosen.AllClassUser(loged.getUser_id());
+            List<classUser> listCU = daosen.AllClassUser(loged.getUser_id());
             session.setAttribute("listCU", listCU);
             
             Vector<Class_s> vect = daoChangePass.viewClassByStudent(loged.getUser_id() + "");

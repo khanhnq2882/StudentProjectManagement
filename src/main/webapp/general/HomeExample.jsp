@@ -16,7 +16,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>G1 - Dashboard</title>
+        <title>G6 - Dashboard</title>
 
         <!-- Custom fonts for this template-->
         <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">

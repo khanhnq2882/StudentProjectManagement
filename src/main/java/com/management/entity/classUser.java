@@ -1,6 +1,6 @@
 package com.management.entity;
 
-public class ClassUser {
+public class classUser {
 
     int idclassuser;
     int class_id;
@@ -28,10 +28,10 @@ public class ClassUser {
     int iter_status;
     int iter_id;
 
-    public ClassUser() {
+    public classUser() {
     }
 
-    public ClassUser(int idclassuser, int class_id, int team_id, int user_id, int team_leader, String dropout_date, String user_notes, String ongoing_eval, String final_pres_eval, String final_topic_eval, int status, String class_code, String trainer_id, String subject_id, String userFullName, String subject_code, String subject_name, String author_name, String trainer_name, String trainer_email, String class_year) {
+    public classUser(int idclassuser, int class_id, int team_id, int user_id, int team_leader, String dropout_date, String user_notes, String ongoing_eval, String final_pres_eval, String final_topic_eval, int status, String class_code, String trainer_id, String subject_id, String userFullName, String subject_code, String subject_name, String author_name, String trainer_name, String trainer_email, String class_year) {
         this.idclassuser = idclassuser;
         this.class_id = class_id;
         this.team_id = team_id;
@@ -55,7 +55,7 @@ public class ClassUser {
         this.class_year = class_year;
     }
 
-    public ClassUser(String class_code, String subject_code, String subject_name, String iteration_name, String duration, int iter_status, int iter_id) {
+    public classUser(String class_code, String subject_code, String subject_name, String iteration_name, String duration, int iter_status, int iter_id) {
         this.class_code = class_code;
         this.subject_code = subject_code;
         this.subject_name = subject_name;

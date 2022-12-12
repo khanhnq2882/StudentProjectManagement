@@ -1,12 +1,10 @@
 package com.management.dao;
 
 import com.management.connectdb.ConnectJDBC;
-import com.management.entity.ClassUser;
+import com.management.entity.classUser;
 import com.management.entity.Class_s;
 import com.management.entity.Subject;
 import com.management.entity.User;
-import org.apache.commons.codec.binary.StringUtils;
-import org.apache.poi.util.StringUtil;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
@@ -67,8 +65,8 @@ public class DAOSen extends ConnectJDBC {
         return result;
     }
 
-    public List<ClassUser> AllClassUser(int userid) {
-        List<ClassUser> list = new ArrayList<>();
+    public List<classUser> AllClassUser(int userid) {
+        List<classUser> list = new ArrayList<>();
         String sql = "SELECT * FROM classuser a\n"
                 + "join class b on a.class_id = b.class_id\n"
                 + "join user c on a.user_id = c.user_id\n"
@@ -79,7 +77,7 @@ public class DAOSen extends ConnectJDBC {
         ResultSet rs = getData(sql);
         try {
             while (rs.next()) {
-                list.add(new ClassUser(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), rs.getInt(5),
+                list.add(new classUser(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), rs.getInt(5),
                         rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10),
                         rs.getInt(11), rs.getString(13), rs.getString(14), rs.getString(15), rs.getString(23),
                         rs.getString(36), rs.getString(37), rs.getString(43), rs.getString(57), rs.getString(60), rs.getString(16)));
