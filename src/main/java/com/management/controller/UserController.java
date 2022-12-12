@@ -94,7 +94,7 @@ public class UserController extends HttpServlet {
                     request.setAttribute("search", data);
                     request.setAttribute("page", page);
                     request.setAttribute("numberPage", numberPage);
-                    RequestDispatcher di = request.getRequestDispatcher("/User/ListAllUser.jsp");
+                    RequestDispatcher di = request.getRequestDispatcher("/views/ListAllUser.jsp");
                     di.forward(request, response);
                 } else {
                     if (dao.countUser(data) % 10 == 0) {
@@ -112,7 +112,7 @@ public class UserController extends HttpServlet {
                     request.setAttribute("search", data);
                     request.setAttribute("page", page);
                     request.setAttribute("numberPage", numberPage);
-                    RequestDispatcher di = request.getRequestDispatcher("/User/ListAllUser.jsp");
+                    RequestDispatcher di = request.getRequestDispatcher("/views/ListAllUser.jsp");
                     di.forward(request, response);
                 }
             }
@@ -121,7 +121,7 @@ public class UserController extends HttpServlet {
                 Vector<User> ve = dao.listUserByClass(id);
                 request.setAttribute("listByClass", ve);
                 request.setAttribute("classid", id);
-                RequestDispatcher di = request.getRequestDispatcher("/User/ListUserByClass.jsp");
+                RequestDispatcher di = request.getRequestDispatcher("/views/ListUserByClass.jsp");
                 di.forward(request, response);
             }
 
@@ -167,7 +167,7 @@ public class UserController extends HttpServlet {
                 request.setAttribute("role", roleID);
                 request.setAttribute("page", page);
                 request.setAttribute("numberPage", numberPage);
-                RequestDispatcher di = request.getRequestDispatcher("/User/ListAllUser.jsp");
+                RequestDispatcher di = request.getRequestDispatcher("/views/ListAllUser.jsp");
                 di.forward(request, response);
             }
 
@@ -212,7 +212,7 @@ public class UserController extends HttpServlet {
                 request.setAttribute("status", sta);
                 request.setAttribute("page", page);
                 request.setAttribute("numberPage", numberPage);
-                RequestDispatcher di = request.getRequestDispatcher("/User/ListAllUser.jsp");
+                RequestDispatcher di = request.getRequestDispatcher("/views/ListAllUser.jsp");
                 di.forward(request, response);
             }
 
@@ -257,7 +257,7 @@ public class UserController extends HttpServlet {
                 request.setAttribute("sort", sta);
                 request.setAttribute("page", page);
                 request.setAttribute("numberPage", numberPage);
-                RequestDispatcher di = request.getRequestDispatcher("/User/ListAllUser.jsp");
+                RequestDispatcher di = request.getRequestDispatcher("/views/ListAllUser.jsp");
                 di.forward(request, response);
             }
 
@@ -281,13 +281,13 @@ public class UserController extends HttpServlet {
                 Vector<User> v1 = dao.listUserByClass(classid);
                 request.setAttribute("listByClass", v1);
                 response.sendRedirect("UserController");
-                request.getRequestDispatcher("/User/ListUserByClass.jsp").forward(request, response);
+                request.getRequestDispatcher("/views/ListUserByClass.jsp").forward(request, response);
             }
 
             if (service.equals("addNewUser")) {
                 String submitAd = request.getParameter("submitAd");
                 if (submitAd == null) {
-                    request.getRequestDispatcher("/User/AddNewUser.jsp").forward(request, response);
+                    request.getRequestDispatcher("/views/AddNewUser.jsp").forward(request, response);
                 } else {
                     LocalDate da = LocalDate.now();
                     String roll = request.getParameter("rollNumber");
@@ -308,14 +308,14 @@ public class UserController extends HttpServlet {
                     if (roll.equals("") || name.equals("") || dateBirth.equals("") || email.equals("")) {
                         request.setAttribute("err", "Not allow null!");
                         request.setAttribute("FullNAME", name);
-                        request.getRequestDispatcher("/User/AddNewUser.jsp").forward(request, response);
+                        request.getRequestDispatcher("/views/AddNewUser.jsp").forward(request, response);
                     }
                     Vector<User> vec1 = dao.listAllUserNoID();
                     for (User uu : vec1) {
                         if (email.equals(uu.getEmail())) {
                             request.setAttribute("FullNAME", name);
                             request.setAttribute("err", "Your email has been used! Please enter the other email!");
-                            request.getRequestDispatcher("/User/AddNewUser.jsp").forward(request, response);
+                            request.getRequestDispatcher("/views/AddNewUser.jsp").forward(request, response);
                         }
                     }
                     User u2 = new User(roll, name, gender, dateBirth, email, roleid, 1, email, dao.encrypt(pass), note);
@@ -359,7 +359,7 @@ public class UserController extends HttpServlet {
                 String submit = request.getParameter("submit");
                 if (submit == null) {
                     request.setAttribute("dateNow", da);
-                    request.getRequestDispatcher("/User/UpdateUser.jsp").forward(request, response);
+                    request.getRequestDispatcher("/views/UpdateUser.jsp").forward(request, response);
                 } else {
                     String roll = request.getParameter("rollNumber");
                     String name = request.getParameter("fullName");
@@ -382,7 +382,7 @@ public class UserController extends HttpServlet {
                         request.setAttribute("dateNow", da);
                         request.setAttribute("err", "Not allow null!");
                         request.setAttribute("listUpdate", u1);
-                        request.getRequestDispatcher("/User/UpdateUser.jsp").forward(request, response);
+                        request.getRequestDispatcher("/views/UpdateUser.jsp").forward(request, response);
                         return;
                     }
                     Vector<User> vec1 = dao.listAllUser(id);
@@ -401,7 +401,7 @@ public class UserController extends HttpServlet {
                             request.setAttribute("err", "Your email has been used! Please enter the other email!");
                             request.setAttribute("phone", phone);
                             request.setAttribute("listUpdate", u1);
-                            request.getRequestDispatcher("/User/UpdateUser.jsp").forward(request, response);
+                            request.getRequestDispatcher("/views/UpdateUser.jsp").forward(request, response);
                         }
                     }
                     if (phone.length() == 10 && phone.startsWith("0") && dao.isNumber(phone)) {
@@ -419,7 +419,7 @@ public class UserController extends HttpServlet {
                         request.setAttribute("err", "Your mobile phone must be about 10 digits from 0 to 9 and must be start with 0!");
                         request.setAttribute("phone", phone);
                         request.setAttribute("listUpdate", u1);
-                        request.getRequestDispatcher("/User/UpdateUser.jsp").forward(request, response);
+                        request.getRequestDispatcher("/views/UpdateUser.jsp").forward(request, response);
                     }
 
                     User u1 = new User(id, roll, name, gender, dateBirth, email, phone, roleid, status, note);
