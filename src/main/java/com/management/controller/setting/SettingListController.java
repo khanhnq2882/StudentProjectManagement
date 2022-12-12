@@ -25,8 +25,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-@WebServlet(name = "SettingListServletController", urlPatterns = {"/SettingListServlet"})
-public class SettingListServletController extends HttpServlet {
+@WebServlet(name = "SettingListController", urlPatterns = {"/SettingList"})
+public class SettingListController extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -75,7 +75,7 @@ public class SettingListServletController extends HttpServlet {
                     String note = request.getParameter("note");
                     Setting obj = new Setting(settingType, name, order, value, status, note);
                     int n = dao.addSetting(obj);
-                    response.sendRedirect("SettingListServletController");
+                    response.sendRedirect("SettingList");
                 }
             }
 
@@ -111,7 +111,7 @@ public class SettingListServletController extends HttpServlet {
                 int status = Integer.parseInt(request.getParameter("status"));
                 int settingId = Integer.parseInt(request.getParameter("settingId"));
                 int n = dao.updateStatus(status, settingId);
-                response.sendRedirect("SettingListServletController");
+                response.sendRedirect("SettingList");
 
             }
             if (service.equals("syncLabel")) {
@@ -141,7 +141,7 @@ public class SettingListServletController extends HttpServlet {
                 String settingId = request.getParameter("setting_id");
                 String typeId = request.getParameter("Type");
                 int n = dao.deleteSetting(settingId, typeId);
-                response.sendRedirect("SettingListServletController");
+                response.sendRedirect("SettingList");
             }
         } catch (Exception e) {
             request.getRequestDispatcher("404.html").forward(request, response);

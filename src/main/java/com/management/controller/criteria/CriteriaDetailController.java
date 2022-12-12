@@ -83,7 +83,7 @@ public class CriteriaDetailController extends HttpServlet {
             if (service.equals("Delete")) {
                 int cid = Integer.parseInt(request.getParameter("cid"));
                 Criteria c = dao.getDelete(cid);
-                response.sendRedirect("criteria");
+                response.sendRedirect("Criteria");
             }
             if (service.equals("add")) {
                 //   List<Criteria> listSubId = dao.viewSubjectCode();
@@ -112,7 +112,7 @@ public class CriteriaDetailController extends HttpServlet {
                         request.setAttribute("title", "Add thành công");
                         request.setAttribute("message", "Vua add duoc roi day!");
                         request.setAttribute("theme", "Success");
-                        request.getRequestDispatcher("criteria").forward(request, response);
+                        request.getRequestDispatcher("Criteria").forward(request, response);
                     }
                 } else {
                     if (!loc.matches("^\\d+$")) {

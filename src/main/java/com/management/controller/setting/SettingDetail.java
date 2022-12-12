@@ -57,7 +57,7 @@ public class SettingDetail extends HttpServlet {
                 // request.setAttribute("script", note);
 //                out.print(group+set_title+set_value+set_order+set_status+scrip);
                 dao1.editSetting(id, group, set_title, set_value, set_order, status, note);
-                response.sendRedirect("SettingListServlet");
+                response.sendRedirect("SettingList");
             }
         } catch (Exception e) {
             request.getRequestDispatcher("404.html").forward(request, response);
