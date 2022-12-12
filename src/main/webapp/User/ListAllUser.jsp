@@ -72,7 +72,7 @@
 <div id="wrapper">
 
   <!-- Sidebar -->
-  <jsp:include page="../views/Sidebar.jsp"></jsp:include>
+  <jsp:include page="../general/Sidebar.jsp"></jsp:include>
 
   <!-- End of Sidebar -->
 
