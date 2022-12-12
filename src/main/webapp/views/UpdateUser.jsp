@@ -155,7 +155,7 @@
 </a>
 
 <!-- Logout Modal-->
-<jsp:include page="../views/LogOut.jsp"></jsp:include>
+<jsp:include page="LogOut.jsp"></jsp:include>
 
 <!-- Bootstrap core JavaScript-->
 <script src="vendor/jquery/jquery.min.js"></script>

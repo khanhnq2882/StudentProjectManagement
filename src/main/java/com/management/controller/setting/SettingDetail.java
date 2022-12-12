@@ -44,7 +44,7 @@ public class SettingDetail extends HttpServlet {
                 // out.print(listType);
                 request.setAttribute("s", list);
                 request.setAttribute("type", typeID);
-                request.getRequestDispatcher("/Setting/SettingDetails.jsp").forward(request, response);
+                request.getRequestDispatcher("/views/SettingDetails.jsp").forward(request, response);
             }
             if (service.equals("UpdateDetail")) {
                 int id = Integer.parseInt(request.getParameter("setting_id"));
