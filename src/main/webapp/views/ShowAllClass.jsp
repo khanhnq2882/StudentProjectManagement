@@ -144,7 +144,7 @@
                                                     <span class="material-symbols-outlined">
                                                         edit
                                                     </span></a>
-                                            <a href="TeamList?go=listAllTeam&cid=${o.id}">
+                                            <a href="TeamManagement?classId=${o.id}">
                                                     <span class="material-symbols-outlined">
                                                         group
                                                     </span></a>

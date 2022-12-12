@@ -2,6 +2,7 @@ package com.management.dao;
 
 import com.management.connectdb.ConnectJDBC;
 import com.management.entity.ClassUser;
+import com.management.entity.Class_s;
 import com.management.entity.Subject;
 import com.management.entity.User;
 import org.apache.commons.codec.binary.StringUtils;
@@ -405,6 +406,56 @@ public class DAOSen extends ConnectJDBC {
                 return new User(rs.getInt(1), rs.getString(2), rs.getString(3),
                         rs.getInt(4), rs.getString(5), rs.getString(6), rs.getString(7),
                         rs.getString(8), rs.getString(9), rs.getInt(10), rs.getInt(11), rs.getString(12), rs.getString(13));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<Class_s> getAllClass() {
+        List<Class_s> list = new ArrayList<>();
+        String sql = "SELECT * FROM class;";
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                int i = 0;
+                Class_s c = new Class_s();
+                c.setId(rs.getInt(++i));
+                c.setClassCode(rs.getString(++i));
+                c.setTrainerId(rs.getString(++i));
+                c.setSubjectId(rs.getString(++i));
+                c.setClassYear(rs.getString(++i));
+                c.setClassTerm(rs.getString(++i));
+                c.setBlock5Class(rs.getString(++i));
+                c.setStatus(rs.getInt(++i));
+                c.setNote(rs.getString(++i));
+
+                list.add(c);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public Class_s getClassById(String id) {
+        String sql = "SELECT * FROM class where class_id = " + id;
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                int i = 0;
+                Class_s c = new Class_s();
+                c.setId(rs.getInt(++i));
+                c.setClassCode(rs.getString(++i));
+                c.setTrainerId(rs.getString(++i));
+                c.setSubjectId(rs.getString(++i));
+                c.setClassYear(rs.getString(++i));
+                c.setClassTerm(rs.getString(++i));
+                c.setBlock5Class(rs.getString(++i));
+                c.setStatus(rs.getInt(++i));
+                c.setNote(rs.getString(++i));
+                return c;
             }
         } catch (Exception e) {
             e.printStackTrace();

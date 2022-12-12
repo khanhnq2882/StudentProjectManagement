@@ -78,7 +78,7 @@
                     <a class="collapse-item"  href="ClassUser">Classes</a>
                     <a class="collapse-item"  href="ClassUser4Admin">Class Students</a>
                     <a class="collapse-item"  href="MilestoneListServlet">Milestone</a>
-                    <a class="collapse-item"  href="TeamList">Team</a>
+                    <a class="collapse-item"  href="TeamManagement">Team</a>
                     <a class="collapse-item"  href="FeatureListTrainer">Feature</a>
                     <a class="collapse-item"  href="FunctionListTrainer">Function</a>
                 </div>
