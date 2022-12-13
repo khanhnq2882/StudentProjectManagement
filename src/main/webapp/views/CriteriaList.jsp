@@ -1,10 +1,4 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: ADMIN
-  Date: 12/4/2022
-  Time: 9:06 PM
-  To change this template use File | Settings | File Templates.
---%>
+
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -139,18 +133,6 @@
 
 
         </div>
-        <!-- End of Main Content -->
-
-        <!-- Footer -->
-        <footer class="sticky-footer bg-white">
-            <div class="container my-auto">
-                <div class="copyright text-center my-auto">
-                    <span>Copyright &copy; Your Website 2021</span>
-                </div>
-            </div>
-        </footer>
-        <!-- End of Footer -->
-
     </div>
     <!-- End of Content Wrapper -->
 

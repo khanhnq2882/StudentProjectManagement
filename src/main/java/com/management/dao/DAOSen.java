@@ -37,6 +37,184 @@ public class DAOSen extends ConnectJDBC {
         }
         return null;
     }
+    public List<User> StudentInClass(String classid) {
+        List<User> list = new ArrayList<>();
+        String sql = "SELECT * FROM classuser a\n"
+                + "join class b on a.class_id = b.class_id\n"
+                + "join user c on a.user_id = c.user_id\n"
+                + "join subject d on b.subject_id = d.subject_id \n"
+                + "join user e on d.author_id = e.user_id\n"
+                + "join user f on b.trainer_id = f.user_id left join team g on a.team_id = g.team_id\n"
+                + "where a.class_id = " + classid + " and c.role_id = 1";
+        System.out.println(sql);
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                list.add(new User(rs.getInt(21), rs.getString(22), rs.getString(23), rs.getInt(24),
+                        rs.getString(25), rs.getString(26), rs.getString(27), rs.getString(28),
+                        rs.getString(29), rs.getInt(30), rs.getInt(31), rs.getString(32), rs.getString(33), rs.getInt(1), rs.getString(75), rs.getInt(5)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public classUser OneClass(String classid) {
+        String sql = "SELECT * FROM class b \n"
+                + "join subject d on b.subject_id = d.subject_id \n"
+                + "join user e on d.author_id = e.user_id\n"
+                + "join user f on b.trainer_id = f.user_id\n"
+                + "where b.class_id = " + classid + "";
+        System.out.println(sql);
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                return new classUser(rs.getInt(1), rs.getInt(1), rs.getInt(1), rs.getInt(1), rs.getInt(1),
+                        rs.getString(1), rs.getString(1), rs.getString(1), rs.getString(1), rs.getString(1),
+                        rs.getInt(1), rs.getString(2), rs.getString(1), rs.getString(1), rs.getString(1),
+                        rs.getString(11), rs.getString(12), rs.getString(18), rs.getString(32), rs.getString(1), rs.getString(1));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public int DeleteClassUser(String id) {
+        int n = 0;
+        String sql = "DELETE FROM classuser WHERE idclassuser = " + id + "";
+        System.out.println(sql);
+        try {
+            Connection conn = getConnection();
+            Statement s = conn.createStatement();
+            n = s.executeUpdate(sql);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return n;
+    }
+
+    public int CountHiHi(String classid, String filter) {
+        List<User> list = new ArrayList<>();
+        String sql = "SELECT count(*) from user \n"
+                + "where user_id not in(\n"
+                + "SELECT a.user_id from user a \n"
+                + "join classuser b on a.user_id = b.user_id\n"
+                + "where b.class_id = " + classid + "\n"
+                + ") and role_id = 1" + filter + "";
+        System.out.println(sql);
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public List<User> StudentNotInClass(String classid, int index, String filter) {
+        List<User> list = new ArrayList<>();
+        String sql = "SELECT * from user \n"
+                + "where user_id not in(\n"
+                + "SELECT a.user_id from user a \n"
+                + "join classuser b on a.user_id = b.user_id\n"
+                + "where b.class_id = " + classid + "\n"
+                + ") and role_id = 1 " + filter + " limit 20 offset " + (index - 1) * 20 + "\n";
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                list.add(new User(rs.getInt(1), rs.getString(2), rs.getString(3),
+                        rs.getInt(4), rs.getString(5), rs.getString(6), rs.getString(7),
+                        rs.getString(8), rs.getString(9), rs.getInt(10), rs.getInt(11), rs.getString(12), rs.getString(13)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<User> SearchStudentInClass(String classid, String filter) {
+        List<User> list = new ArrayList<>();
+        String sql = "SELECT * FROM classuser a\n"
+                + "join class b on a.class_id = b.class_id\n"
+                + "join user c on a.user_id = c.user_id\n"
+                + "join subject d on b.subject_id = d.subject_id \n"
+                + "join user e on d.author_id = e.user_id\n"
+                + "join user f on b.trainer_id = f.user_id left join team g on a.team_id = g.team_id\n"
+                + "where a.class_id = " + classid + " and c.role_id = 1 " + filter + "";
+        System.out.println(sql);
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                list.add(new User(rs.getInt(21), rs.getString(22), rs.getString(23), rs.getInt(24),
+                        rs.getString(25), rs.getString(26), rs.getString(27), rs.getString(28),
+                        rs.getString(29), rs.getInt(30), rs.getInt(31), rs.getString(32), rs.getString(33), rs.getInt(1), rs.getString(75), rs.getInt(5)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+
+
+
+
+    public void AddClassUser(String class_id, String user_id) {
+        String sql = "INSERT INTO classuser (class_id, user_id) VALUES (" + class_id + ", " + user_id + ");";
+        try {
+            Connection conn = getConnection();
+            Statement s = conn.createStatement();
+            s.executeUpdate(sql);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+
+
+
+    public classUser OneClassUser(int userid, String classid) {
+        String sql = "SELECT * FROM classuser a\n"
+                + "join class b on a.class_id = b.class_id\n"
+                + "join user c on a.user_id = c.user_id\n"
+                + "join subject d on b.subject_id = d.subject_id \n"
+                + "join user e on d.author_id = e.user_id\n"
+                + "join user f on b.trainer_id = f.user_id\n"
+                + "where a.user_id = " + userid + " and a.class_id = " + classid + "";
+        System.out.println(sql);
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                return new classUser(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), rs.getInt(5),
+                        rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10),
+                        rs.getInt(11), rs.getString(13), rs.getString(14), rs.getString(15), rs.getString(23),
+                        rs.getString(36), rs.getString(37), rs.getString(43), rs.getString(57), rs.getString(60), rs.getString(16));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<classUser> AllClassUserIter(String classid) {
+        List<classUser> list = new ArrayList<>();
+        String sql = "select * from class a join subject b on a.subject_id = b.subject_id\n"
+                + "join iteration c on b.subject_id = c.subject_id where a.class_id = " + classid + "";
+        System.out.println(sql);
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                list.add(new classUser(rs.getString(2), rs.getString(11), rs.getString(12), rs.getString(18), rs.getString(19), rs.getInt(20), rs.getInt(16)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 
     public String decrypt(String strToDecrypt) { // giai ma
         try {
