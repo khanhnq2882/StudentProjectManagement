@@ -7,7 +7,7 @@
         <div class="sidebar-brand-icon rotate-n-15">
             <img src="<c:url value="/assets/img/logo-university.png"/>" style="max-height: 50px; border-radius: 5px; object-fit: cover;">
         </div>
-        <div class="sidebar-brand-text mx-3">Group 1 Project</div>
+        <div class="sidebar-brand-text mx-3">Group 6 Project</div>
     </a>
 
     <!-- Divider -->
