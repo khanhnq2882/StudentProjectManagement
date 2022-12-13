@@ -38,6 +38,45 @@ public class DAOSen extends ConnectJDBC {
         return null;
     }
 
+    public classUser OneClassUser(int userid, String classid) {
+        String sql = "SELECT * FROM classuser a\n"
+                + "join class b on a.class_id = b.class_id\n"
+                + "join user c on a.user_id = c.user_id\n"
+                + "join subject d on b.subject_id = d.subject_id \n"
+                + "join user e on d.author_id = e.user_id\n"
+                + "join user f on b.trainer_id = f.user_id\n"
+                + "where a.user_id = " + userid + " and a.class_id = " + classid + "";
+        System.out.println(sql);
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                return new classUser(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), rs.getInt(5),
+                        rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10),
+                        rs.getInt(11), rs.getString(13), rs.getString(14), rs.getString(15), rs.getString(23),
+                        rs.getString(36), rs.getString(37), rs.getString(43), rs.getString(57), rs.getString(60), rs.getString(16));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<classUser> AllClassUserIter(String classid) {
+        List<classUser> list = new ArrayList<>();
+        String sql = "select * from class a join subject b on a.subject_id = b.subject_id\n"
+                + "join iteration c on b.subject_id = c.subject_id where a.class_id = " + classid + "";
+        System.out.println(sql);
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                list.add(new classUser(rs.getString(2), rs.getString(11), rs.getString(12), rs.getString(18), rs.getString(19), rs.getInt(20), rs.getInt(16)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     public String decrypt(String strToDecrypt) { // giai ma
         try {
             MessageDigest sha = MessageDigest.getInstance("SHA-1");

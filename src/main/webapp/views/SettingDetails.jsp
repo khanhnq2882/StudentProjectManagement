@@ -1,39 +1,12 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: hp
-  Date: 12/11/2022
-  Time: 2:08 PM
-  To change this template use File | Settings | File Templates.
---%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Vector"%>
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-  <c:set var="typeValue" value="${sessionScope.typeValue}"></c:set>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
+<jsp:include page="../general/Head.jsp"></jsp:include>
 
-  <title>G1 - Update Setting</title>
-
-  <!-- Custom fonts for this template-->
-  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-  <link
-          href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-          rel="stylesheet">
-
-  <!-- Custom styles for this template-->
-  <link href="css/sb-admin-2.min.css" rel="stylesheet">
-  <link href="css/SenCss.css" rel="stylesheet">
-  <link rel="icon" href="img/cai nay hoi la.png" type="image/gif" sizes="16x16">
-
-  <link rel="stylesheet" href="fnon.min.css">
-</head>
 
 <body id="page-top">
 
@@ -96,16 +69,6 @@
 
     </div>
     <!-- End of Main Content -->
-
-    <!-- Footer -->
-    <footer class="sticky-footer bg-white">
-      <div class="container my-auto">
-        <div class="copyright text-center my-auto">
-          <span>Copyright &copy; Your Website 2020</span>
-        </div>
-      </div>
-    </footer>
-    <!-- End of Footer -->
 
   </div>
   <!-- End of Content Wrapper -->
