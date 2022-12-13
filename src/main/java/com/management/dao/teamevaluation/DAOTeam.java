@@ -69,18 +69,40 @@ public class DAOTeam extends ConnectJDBC {
         }
         return list;
     }
-    public int addTeam(Team t) {
+    public int addTeam(Team team) {
         int n = 0;
-        String sql = "insert into team (class_id, topic_code, topic_name, gitlab_url, status, team_name) \n"
-                + " values (?,?,?,?,?,?)";
+        String sql = "insert into team (class_id, topic_code, topic_name, gitlab_url, status, team_name, team_leader) \n"
+                + " values (?,?,?,?,?,?,?)";
         try {
             ps = conn.prepareStatement(sql);
-            ps.setString(1, t.getClass_id());
-            ps.setString(2, t.getTopic_code());
-            ps.setString(3, t.getTopic_name());
-            ps.setString(4, t.getGitlab_url());
-            ps.setInt(5, t.getStatus());
-            ps.setString(6, t.getTeam_name());
+            ps.setString(1, team.getClass_id());
+            ps.setString(2, team.getTopic_code());
+            ps.setString(3, team.getTopic_name());
+            ps.setString(4, team.getGitlab_url());
+            ps.setInt(5, team.getStatus());
+            ps.setString(6, team.getTeam_name());
+            ps.setString(7, team.getTeamLeader());
+            n = ps.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return n;
+    }
+    public int updateTeam(Team team) {
+        int n = 0;
+        String sql = "UPDATE team\n" +
+                "SET class_id = ?, topic_code = ?, topic_name = ?, gitlab_url = ?, status = ?, team_name = ?, team_leader = ?\n" +
+                "WHERE team_id = ?";
+        try {
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, team.getClass_id());
+            ps.setString(2, team.getTopic_code());
+            ps.setString(3, team.getTopic_name());
+            ps.setString(4, team.getGitlab_url());
+            ps.setInt(5, team.getStatus());
+            ps.setString(6, team.getTeam_name());
+            ps.setString(7, team.getTeamLeader());
+            ps.setInt(8, team.getTeam_id());
             n = ps.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -233,5 +255,30 @@ public class DAOTeam extends ConnectJDBC {
             ex.printStackTrace();
         }
         return list;
+    }
+    public Team getTeamById(String team_id) {
+        String sql = "select * from team where team_id = " + team_id;
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                return new Team(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getInt(6),
+                        rs.getString(7),
+                        rs.getString(8));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    public static void main(String[] args) {
+        DAOTeam daoTeam = new DAOTeam();
+        int n = daoTeam.addTeam(new Team());
+        System.out.println(n);
     }
 }

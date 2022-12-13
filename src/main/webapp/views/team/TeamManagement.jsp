@@ -20,16 +20,15 @@
             <jsp:include page="/general/Header.jsp"></jsp:include>
             <div class="container-fluid">
                 <h1 class="h3 mb-2 text-gray-800">Team List</h1>
-                <div>
-                    <a class="LinkHere" href="TeamManagement?go=addTeam">Add Team</a>
-                </div>
 
                 <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary"></h6>
-                        <c:if test="${Loged.role_id == 2}">
-                            <a href="FeatureListTrainer">Show All Feature</a
+                    <div class="card-header justify-content-end py-3">
+                        <c:if test="${sessionScope.Loged.role_id eq 2}">
+                            <a class="btn btn-primary mr-3" href="<%=request.getContextPath()%>/FeatureListTrainer">Show
+                                All Feature</a>
                         </c:if>
+                        <a class="btn btn-primary" href="<%=request.getContextPath()%>/TeamManagement?action=addTeam">Add
+                            Team</a>
                     </div>
 
                     <div class="card-body">
@@ -52,23 +51,6 @@
                                     <th>Update Status</th>
                                 </tr>
                                 </thead>
-                                <tfoot>
-                                <tr>
-                                    <th>Team ID</th>
-                                    <th>Class Name</th>
-                                    <th>Topic Code</th>
-                                    <th>Topic Name</th>
-                                    <th>GitLab URL</th>
-                                    <th>Leader Name</th>
-                                    <th>Status</th>
-                                    <th>Issues</th>
-                                    <c:if test="${Loged.role_id == 1}">
-                                        <th>Feature</th>
-                                    </c:if>
-                                    <th>Action</th>
-                                    <th>Update Status</th>
-                                </tr>
-                                </tfoot>
                                 <tbody>
                                 <c:forEach var="o" items="${teamList}">
                                     <tr>
@@ -98,15 +80,14 @@
                                             <td><a href="FeatureList">View Feature</a></td>
                                         </c:if>
                                         <td>
-                                            <c:if test="${Loged.role_id == 2}">
-                                                <a class="" href="TeamDetail?go=UpdateTeam&team_id=${o.team_id}">
-                                                    <ion-icon name="create-outline"></ion-icon>
-                                                    Edit</a>
-                                            </c:if>
-                                            <br>
-                                            <a class="" href="TeamEvaluationList?go=listAllTeamEval&team=${o.team_id}">
-                                                <ion-icon name="document-text-outline"></ion-icon>
-                                                View evaluation list</a>
+                                            <div class="d-flex justify-content-center" style="font-size: 20px;">
+<%--                                                <c:if test="${Loged.role_id == 2}">--%>
+                                                    <a class="mr-2" href="<%=request.getContextPath()%>/TeamEvaluationList?go=listAllTeamEval&team=${o.team_id}"><i
+                                                            class="fa-solid fa-eye"></i></a>
+<%--                                                </c:if>--%>
+                                                <a href="<%=request.getContextPath()%>/TeamManagement?action=updateTeam&teamId=${o.team_id}"><i
+                                                        class="fa-solid fa-pen-to-square"></i></a>
+                                            </div>
                                         </td>
                                         <td>
                                             <form method="POST" action="TeamManagement?go=listAllTeam&cid=${o.team_id}">

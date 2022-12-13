@@ -1,6 +1,7 @@
 package com.management.dao;
 
 import com.management.connectdb.ConnectJDBC;
+import com.management.controller.ClassUser;
 import com.management.entity.classUser;
 import com.management.entity.Class_s;
 import com.management.entity.Subject;
@@ -637,5 +638,37 @@ public class DAOSen extends ConnectJDBC {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public List<User> getAllUserByRoleId(String roleId) {
+        List<User> list = new ArrayList<>();
+        String sql = "select * from user where role_id = " + roleId;
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                User user = new User();
+
+                int i = 0;
+                user.setUser_id(rs.getInt(++i));
+                user.setRoll_number(rs.getString(++i));
+                user.setFullname(rs.getString(++i));
+                user.setGender(rs.getInt(++i));
+                user.setDate_of_birth(rs.getString(++i));
+                user.setEmail(rs.getString(++i));
+                user.setMobile(rs.getString(++i));
+                user.setAvatar_link(rs.getString(++i));
+                user.setFacebook_link(rs.getString(++i));
+                user.setRole_id(rs.getInt(++i));
+                user.setStatus(rs.getInt(++i));
+                user.setUser(rs.getString(++i));
+                user.setPass(rs.getString(++i));
+                user.setNote(rs.getString(++i));
+
+                list.add(user);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return list;
     }
 }
