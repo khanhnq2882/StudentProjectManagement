@@ -25,14 +25,15 @@
                                     <p class="mb-4">We get it, stuff happens. Just enter your email address below
                                         and we'll send you a link to reset your password!</p>
                                 </div>
-                                <form action="<%=request.getContextPath()%>/ForgotPassword" method="POST" class="user">
+                                <form action="ForgotPassword" method="POST" class="user">
                                     <div class="form-group">
                                         <input name="email" type="email" class="form-control form-control-user"
                                                id="exampleInputEmail" aria-describedby="emailHelp"
-                                               placeholder="Enter Email Address..." required>
+                                               placeholder="Enter Email Address..." required >
                                     </div>
+                                    ${mess}<br>
                                     <div class="log">
-                                        <input type="submit" value="Reset Password"/>
+                                        <input type="submit" value="Reset Password" name="Reset"/>
                                     </div>
 
                                 </form>

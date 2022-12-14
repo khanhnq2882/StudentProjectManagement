@@ -335,5 +335,27 @@ public class DAOChangePass extends ConnectJDBC {
         }
         return vect;
     }
+    public Vector<Class_s> viewAllClassByTrainer(String s) {
+        Vector<Class_s> vect = new Vector<>();
+        String sql = "select * from class where trainer_id = " + s;
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                int id = rs.getInt(1);
+                String ClassCode = rs.getString(2);
+                String trainerId = rs.getString(3);
+                String SubjectId = rs.getString(4);
+                String ClassYear = rs.getString(5);
+                String ClassTerm = rs.getString(6);
+                String Block5Class = rs.getString(7);
+                int status = rs.getInt(8);
+                Class_s u = new Class_s(id, ClassCode, ShowTeacher(trainerId), ShowSubject(SubjectId), ClassYear, ClassTerm, Block5Class, status);
+                vect.add(u);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return vect;
+    }
 
 }
