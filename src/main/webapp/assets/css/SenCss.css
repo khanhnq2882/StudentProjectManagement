@@ -74,7 +74,6 @@ select.Gender {
 .container a:hover, h3:hover,
 .container-fluid a:hover{
     text-decoration: none;
-    color: chocolate;
 }
 .aa {
     position: absolute;
@@ -399,4 +398,8 @@ table.dataTable thead>tr>th.sorting:after, table.dataTable thead>tr>th.sorting_a
 }
 table.dataTable thead>tr>th.sorting:before, table.dataTable thead>tr>th.sorting_asc:before, table.dataTable thead>tr>th.sorting_desc:before, table.dataTable thead>tr>th.sorting_asc_disabled:before, table.dataTable thead>tr>th.sorting_desc_disabled:before, table.dataTable thead>tr>td.sorting:before, table.dataTable thead>tr>td.sorting_asc:before, table.dataTable thead>tr>td.sorting_desc:before, table.dataTable thead>tr>td.sorting_asc_disabled:before, table.dataTable thead>tr>td.sorting_desc_disabled:before {
     margin-bottom: 2px !important;
+}
+table.table-bordered.dataTable tbody th, table.table-bordered.dataTable tbody td {
+    text-align: center;
+    vertical-align: middle;
 }

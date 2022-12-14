@@ -1,7 +1,10 @@
 package com.management.controller;
 
+import com.management.dao.DAOSen;
 import com.management.dao.UserDAO;
 import com.management.entity.User;
+import com.management.util.AbstractConstants;
+import com.management.util.Alert;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -20,10 +23,15 @@ import java.util.Vector;
 public class UserController extends HttpServlet {
 
     UserDAO dao = new UserDAO();
+    DAOSen daoSen = new DAOSen();
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+
         String service = request.getParameter("go");
         HttpSession session = request.getSession();
         User loged = (User) session.getAttribute("Loged");
@@ -35,23 +43,6 @@ public class UserController extends HttpServlet {
             service = "listAllUser";
         }
         try (PrintWriter out = response.getWriter()) {
-//            int page;
-//            int startFrom = 0;
-//            try {
-//                page = Integer.parseInt(request.getParameter("page"));
-//            } catch (Exception e) {
-//                page = 1;
-//            }
-//            if (page == 0) {
-//                page = 1;
-//                startFrom = 0;
-//            }
-//            if (page == 1) {
-//                startFrom = 0;
-//            }
-//            if (page != 1) {
-//                startFrom = (page - 1) * 10;
-//            }
             if (service.equals("listAllUser")) {
                 String submit = request.getParameter("submitSearch");
                 String data = request.getParameter("nameAndRoll");
@@ -318,7 +309,7 @@ public class UserController extends HttpServlet {
                             request.getRequestDispatcher("/views/AddNewUser.jsp").forward(request, response);
                         }
                     }
-                    User u2 = new User(roll, name, gender, dateBirth, email, roleid, 1, email, dao.encrypt(pass), note);
+                    User u2 = new User(roll, name, gender, dateBirth, email, roleid, 1, email, pass, note);
                     int n = dao.addUser(u2);
                     if (n > 0) {
                         String subject = "Register account successfully!";
@@ -337,14 +328,13 @@ public class UserController extends HttpServlet {
                                 + "</body>\n"
                                 + "\n"
                                 + "</html>";
-                        dao.send(email, subject, message, "ducnmhe150901@fpt.edu.vn", "sechan76");
-                        request.setAttribute("title", "Successfully!");
-                        request.setAttribute("message", "Add successfully to database!");
-                        request.setAttribute("theme", "Success");
-                        request.getRequestDispatcher("UserController").forward(request, response);
-//                        response.sendRedirect("UserController");
+                        daoSen.send(email, subject, message, AbstractConstants.EMAIL_USERNAME, AbstractConstants.EMAIL_PASSWORD);
+                        request.setAttribute("alert", new Alert().alert("", "Add new User successfully!", Alert.SUCCESS));
+                        request.getRequestDispatcher("/views/AddNewUser.jsp").forward(request, response);
+                        return;
                     } else {
-                        out.print("add Failed!");
+                        request.setAttribute("alert", new Alert().alert("", "Add new User failed!", Alert.ERROR));
+                        request.getRequestDispatcher("/views/AddNewUser.jsp").forward(request, response);
                     }
                 }
 
@@ -425,15 +415,14 @@ public class UserController extends HttpServlet {
                     User u1 = new User(id, roll, name, gender, dateBirth, email, phone, roleid, status, note);
                     int n = dao.updateUser(u1);
                     if (n > 0) {
-                        request.setAttribute("title", "Successfully!");
-                        request.setAttribute("message", "Update successfully to database!");
-                        request.setAttribute("theme", "Success");
-//                        request.getRequestDispatcher("listAllUser").forward(request, response);
-                        response.sendRedirect("UserController");
+                        request.setAttribute("alert", new Alert().alert("", "Update User successfully!", Alert.SUCCESS));
+                        request.getRequestDispatcher("/views/UpdateUser.jsp").forward(request, response);
                     }
-//                    response.sendRedirect("UserController");
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.getRequestDispatcher("views/404.html").forward(request, response);
         }
     }
 

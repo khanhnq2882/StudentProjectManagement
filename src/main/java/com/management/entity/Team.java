@@ -11,6 +11,18 @@ public class Team {
     String gitlab_url;
     int status;
     String team_name;
+    String teamLeader;
+
+    public Team(int team_id, String class_id, String topic_code, String topic_name, String gitlab_url, int status, String team_name, String teamLeader) {
+        this.team_id = team_id;
+        this.class_id = class_id;
+        this.topic_code = topic_code;
+        this.topic_name = topic_name;
+        this.gitlab_url = gitlab_url;
+        this.status = status;
+        this.team_name = team_name;
+        this.teamLeader = teamLeader;
+    }
 
     public Team(int team_id, String class_id, String topic_code, String topic_name, String team_name) {
         this.team_id = team_id;
@@ -68,7 +80,6 @@ public class Team {
         this.status = status;
         this.team_name = team_name;
     }
-
 
 
     public Team(String class_id, String class_code) {
@@ -140,14 +151,39 @@ public class Team {
         this.team_name = team_name;
     }
 
-    public Class_s getClassroom(){
+    public Class_s getClassroom() {
         DAOChangePass dao = new DAOChangePass();
         return dao.viewClassById(class_id);
     }
 
-    @Override
-    public String toString() {
-        return "Team{" + "team_id=" + team_id + ", class_id=" + class_id + ", topic_code=" + topic_code + ", topic_name=" + topic_name + ", gitlab_url=" + gitlab_url + ", status=" + status + ", team_name=" + team_name + '}';
+    public String getClass_code() {
+        return class_code;
     }
 
+    public void setClass_code(String class_code) {
+        this.class_code = class_code;
+    }
+
+    public String getTeamLeader() {
+        return teamLeader;
+    }
+
+    public void setTeamLeader(String teamLead) {
+        this.teamLeader = teamLead;
+    }
+
+    @Override
+    public String toString() {
+        return "Team{" +
+                "team_id=" + team_id +
+                ", class_id='" + class_id + '\'' +
+                ", class_code='" + class_code + '\'' +
+                ", topic_code='" + topic_code + '\'' +
+                ", topic_name='" + topic_name + '\'' +
+                ", gitlab_url='" + gitlab_url + '\'' +
+                ", status=" + status +
+                ", team_name='" + team_name + '\'' +
+                ", teamLeader=" + teamLeader +
+                '}';
+    }
 }
