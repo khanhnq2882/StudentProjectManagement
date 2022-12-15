@@ -11,8 +11,29 @@ public class Class_s {
     private String ClassTerm;
     private String Block5Class;
     private int status;
+    private String note;
 
     public Class_s() {
+    }
+
+    public Class_s(int id, String classCode, String trainerId, String subjectId, String classYear, String classTerm, String block5Class, int status, String note) {
+        this.id = id;
+        ClassCode = classCode;
+        this.trainerId = trainerId;
+        SubjectId = subjectId;
+        ClassYear = classYear;
+        ClassTerm = classTerm;
+        Block5Class = block5Class;
+        this.status = status;
+        this.note = note;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public Class_s(int id, String ClassCode) {
@@ -107,12 +128,16 @@ public class Class_s {
 
     @Override
     public String toString() {
-        return "Class{" + "id=" + id + ", ClassCode="
-                + ClassCode + ", trainerId=" + trainerId
-                + ", SubjectId=" + SubjectId + ", ClassYear="
-                + ClassYear + ", ClassTerm=" + ClassTerm +
-
-                ", Block5Class=" + Block5Class + ", status=" + status + "}<br>";
+        return "Class_s{" +
+                "id=" + id +
+                ", ClassCode='" + ClassCode + '\'' +
+                ", trainerId='" + trainerId + '\'' +
+                ", SubjectId='" + SubjectId + '\'' +
+                ", ClassYear='" + ClassYear + '\'' +
+                ", ClassTerm='" + ClassTerm + '\'' +
+                ", Block5Class='" + Block5Class + '\'' +
+                ", status=" + status +
+                ", note='" + note + '\'' +
+                '}';
     }
-
 }

@@ -7,7 +7,7 @@
         <div class="sidebar-brand-icon rotate-n-15">
             <img src="<c:url value="/assets/img/logo-university.png"/>" style="max-height: 50px; border-radius: 5px; object-fit: cover;">
         </div>
-        <div class="sidebar-brand-text mx-3">Group 1 Project</div>
+        <div class="sidebar-brand-text mx-3">Group 6 Project</div>
     </a>
 
     <!-- Divider -->
@@ -37,7 +37,7 @@
                     <h6 class="collapse-header">Admin Setting:</h6>
                     <a class="collapse-item" href="SettingListServlet">Setting</a>
                     <a class="collapse-item" href="UserController">User</a>
-                    <a class="collapse-item" href="SubjectList">Subject</a>
+                    <a class="collapse-item" href="SubjectManagement">Subject</a>
                     <a class="collapse-item" href="ShowAllClass">Class</a>
                 </div>
             </div>
@@ -57,7 +57,7 @@
                     <h6 class="collapse-header">Author Setting:</h6>
                     <a class="collapse-item" href="SubjectSettingList">Subject Setting</a>
                     <a class="collapse-item" href="IterationListServlet">Iteration</a>
-                    <a class="collapse-item" href="Criteria">Criteria</a>
+                    <a class="collapse-item" href="<%=request.getContextPath()%>/CriteriaList">Criteria</a>
                 </div>
             </div>
         </li>
@@ -78,7 +78,7 @@
                     <a class="collapse-item"  href="ClassUser">Classes</a>
                     <a class="collapse-item"  href="ClassUser4Admin">Class Students</a>
                     <a class="collapse-item"  href="MilestoneListServlet">Milestone</a>
-                    <a class="collapse-item"  href="TeamList">Team</a>
+                    <a class="collapse-item"  href="TeamManagement">Team</a>
                     <a class="collapse-item"  href="FeatureListTrainer">Feature</a>
                     <a class="collapse-item"  href="FunctionListTrainer">Function</a>
                 </div>

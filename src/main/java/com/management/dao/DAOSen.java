@@ -1,11 +1,11 @@
 package com.management.dao;
 
 import com.management.connectdb.ConnectJDBC;
-import com.management.entity.ClassUser;
+import com.management.controller.ClassUser;
+import com.management.entity.classUser;
+import com.management.entity.Class_s;
 import com.management.entity.Subject;
 import com.management.entity.User;
-import org.apache.commons.codec.binary.StringUtils;
-import org.apache.poi.util.StringUtil;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
@@ -38,6 +38,184 @@ public class DAOSen extends ConnectJDBC {
         }
         return null;
     }
+    public List<User> StudentInClass(String classid) {
+        List<User> list = new ArrayList<>();
+        String sql = "SELECT * FROM classuser a\n"
+                + "join class b on a.class_id = b.class_id\n"
+                + "join user c on a.user_id = c.user_id\n"
+                + "join subject d on b.subject_id = d.subject_id \n"
+                + "join user e on d.author_id = e.user_id\n"
+                + "join user f on b.trainer_id = f.user_id left join team g on a.team_id = g.team_id\n"
+                + "where a.class_id = " + classid + " and c.role_id = 1";
+        System.out.println(sql);
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                list.add(new User(rs.getInt(21), rs.getString(22), rs.getString(23), rs.getInt(24),
+                        rs.getString(25), rs.getString(26), rs.getString(27), rs.getString(28),
+                        rs.getString(29), rs.getInt(30), rs.getInt(31), rs.getString(32), rs.getString(33), rs.getInt(1), rs.getString(75), rs.getInt(5)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public classUser OneClass(String classid) {
+        String sql = "SELECT * FROM class b \n"
+                + "join subject d on b.subject_id = d.subject_id \n"
+                + "join user e on d.author_id = e.user_id\n"
+                + "join user f on b.trainer_id = f.user_id\n"
+                + "where b.class_id = " + classid + "";
+        System.out.println(sql);
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                return new classUser(rs.getInt(1), rs.getInt(1), rs.getInt(1), rs.getInt(1), rs.getInt(1),
+                        rs.getString(1), rs.getString(1), rs.getString(1), rs.getString(1), rs.getString(1),
+                        rs.getInt(1), rs.getString(2), rs.getString(1), rs.getString(1), rs.getString(1),
+                        rs.getString(11), rs.getString(12), rs.getString(18), rs.getString(32), rs.getString(1), rs.getString(1));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public int DeleteClassUser(String id) {
+        int n = 0;
+        String sql = "DELETE FROM classuser WHERE idclassuser = " + id + "";
+        System.out.println(sql);
+        try {
+            Connection conn = getConnection();
+            Statement s = conn.createStatement();
+            n = s.executeUpdate(sql);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return n;
+    }
+
+    public int CountHiHi(String classid, String filter) {
+        List<User> list = new ArrayList<>();
+        String sql = "SELECT count(*) from user \n"
+                + "where user_id not in(\n"
+                + "SELECT a.user_id from user a \n"
+                + "join classuser b on a.user_id = b.user_id\n"
+                + "where b.class_id = " + classid + "\n"
+                + ") and role_id = 1" + filter + "";
+        System.out.println(sql);
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public List<User> StudentNotInClass(String classid, int index, String filter) {
+        List<User> list = new ArrayList<>();
+        String sql = "SELECT * from user \n"
+                + "where user_id not in(\n"
+                + "SELECT a.user_id from user a \n"
+                + "join classuser b on a.user_id = b.user_id\n"
+                + "where b.class_id = " + classid + "\n"
+                + ") and role_id = 1 " + filter + " limit 20 offset " + (index - 1) * 20 + "\n";
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                list.add(new User(rs.getInt(1), rs.getString(2), rs.getString(3),
+                        rs.getInt(4), rs.getString(5), rs.getString(6), rs.getString(7),
+                        rs.getString(8), rs.getString(9), rs.getInt(10), rs.getInt(11), rs.getString(12), rs.getString(13)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<User> SearchStudentInClass(String classid, String filter) {
+        List<User> list = new ArrayList<>();
+        String sql = "SELECT * FROM classuser a\n"
+                + "join class b on a.class_id = b.class_id\n"
+                + "join user c on a.user_id = c.user_id\n"
+                + "join subject d on b.subject_id = d.subject_id \n"
+                + "join user e on d.author_id = e.user_id\n"
+                + "join user f on b.trainer_id = f.user_id left join team g on a.team_id = g.team_id\n"
+                + "where a.class_id = " + classid + " and c.role_id = 1 " + filter + "";
+        System.out.println(sql);
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                list.add(new User(rs.getInt(21), rs.getString(22), rs.getString(23), rs.getInt(24),
+                        rs.getString(25), rs.getString(26), rs.getString(27), rs.getString(28),
+                        rs.getString(29), rs.getInt(30), rs.getInt(31), rs.getString(32), rs.getString(33), rs.getInt(1), rs.getString(75), rs.getInt(5)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+
+
+
+
+    public void AddClassUser(String class_id, String user_id) {
+        String sql = "INSERT INTO classuser (class_id, user_id) VALUES (" + class_id + ", " + user_id + ");";
+        try {
+            Connection conn = getConnection();
+            Statement s = conn.createStatement();
+            s.executeUpdate(sql);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+
+
+
+    public classUser OneClassUser(int userid, String classid) {
+        String sql = "SELECT * FROM classuser a\n"
+                + "join class b on a.class_id = b.class_id\n"
+                + "join user c on a.user_id = c.user_id\n"
+                + "join subject d on b.subject_id = d.subject_id \n"
+                + "join user e on d.author_id = e.user_id\n"
+                + "join user f on b.trainer_id = f.user_id\n"
+                + "where a.user_id = " + userid + " and a.class_id = " + classid + "";
+        System.out.println(sql);
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                return new classUser(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), rs.getInt(5),
+                        rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10),
+                        rs.getInt(11), rs.getString(13), rs.getString(14), rs.getString(15), rs.getString(23),
+                        rs.getString(36), rs.getString(37), rs.getString(43), rs.getString(57), rs.getString(60), rs.getString(16));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<classUser> AllClassUserIter(String classid) {
+        List<classUser> list = new ArrayList<>();
+        String sql = "select * from class a join subject b on a.subject_id = b.subject_id\n"
+                + "join iteration c on b.subject_id = c.subject_id where a.class_id = " + classid + "";
+        System.out.println(sql);
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                list.add(new classUser(rs.getString(2), rs.getString(11), rs.getString(12), rs.getString(18), rs.getString(19), rs.getInt(20), rs.getInt(16)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 
     public String decrypt(String strToDecrypt) { // giai ma
         try {
@@ -66,8 +244,8 @@ public class DAOSen extends ConnectJDBC {
         return result;
     }
 
-    public List<ClassUser> AllClassUser(int userid) {
-        List<ClassUser> list = new ArrayList<>();
+    public List<classUser> AllClassUser(int userid) {
+        List<classUser> list = new ArrayList<>();
         String sql = "SELECT * FROM classuser a\n"
                 + "join class b on a.class_id = b.class_id\n"
                 + "join user c on a.user_id = c.user_id\n"
@@ -78,7 +256,7 @@ public class DAOSen extends ConnectJDBC {
         ResultSet rs = getData(sql);
         try {
             while (rs.next()) {
-                list.add(new ClassUser(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), rs.getInt(5),
+                list.add(new classUser(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), rs.getInt(5),
                         rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10),
                         rs.getInt(11), rs.getString(13), rs.getString(14), rs.getString(15), rs.getString(23),
                         rs.getString(36), rs.getString(37), rs.getString(43), rs.getString(57), rs.getString(60), rs.getString(16)));
@@ -410,5 +588,87 @@ public class DAOSen extends ConnectJDBC {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public List<Class_s> getAllClass() {
+        List<Class_s> list = new ArrayList<>();
+        String sql = "SELECT * FROM class;";
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                int i = 0;
+                Class_s c = new Class_s();
+                c.setId(rs.getInt(++i));
+                c.setClassCode(rs.getString(++i));
+                c.setTrainerId(rs.getString(++i));
+                c.setSubjectId(rs.getString(++i));
+                c.setClassYear(rs.getString(++i));
+                c.setClassTerm(rs.getString(++i));
+                c.setBlock5Class(rs.getString(++i));
+                c.setStatus(rs.getInt(++i));
+                c.setNote(rs.getString(++i));
+
+                list.add(c);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public Class_s getClassById(String id) {
+        String sql = "SELECT * FROM class where class_id = " + id;
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                int i = 0;
+                Class_s c = new Class_s();
+                c.setId(rs.getInt(++i));
+                c.setClassCode(rs.getString(++i));
+                c.setTrainerId(rs.getString(++i));
+                c.setSubjectId(rs.getString(++i));
+                c.setClassYear(rs.getString(++i));
+                c.setClassTerm(rs.getString(++i));
+                c.setBlock5Class(rs.getString(++i));
+                c.setStatus(rs.getInt(++i));
+                c.setNote(rs.getString(++i));
+                return c;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<User> getAllUserByRoleId(String roleId) {
+        List<User> list = new ArrayList<>();
+        String sql = "select * from user where role_id = " + roleId;
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                User user = new User();
+
+                int i = 0;
+                user.setUser_id(rs.getInt(++i));
+                user.setRoll_number(rs.getString(++i));
+                user.setFullname(rs.getString(++i));
+                user.setGender(rs.getInt(++i));
+                user.setDate_of_birth(rs.getString(++i));
+                user.setEmail(rs.getString(++i));
+                user.setMobile(rs.getString(++i));
+                user.setAvatar_link(rs.getString(++i));
+                user.setFacebook_link(rs.getString(++i));
+                user.setRole_id(rs.getInt(++i));
+                user.setStatus(rs.getInt(++i));
+                user.setUser(rs.getString(++i));
+                user.setPass(rs.getString(++i));
+                user.setNote(rs.getString(++i));
+
+                list.add(user);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return list;
     }
 }

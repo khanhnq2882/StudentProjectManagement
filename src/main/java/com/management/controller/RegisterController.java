@@ -3,6 +3,7 @@ package com.management.controller;
 
 import com.management.dao.DAOSen;
 import com.management.entity.User;
+import com.management.util.AbstractConstants;
 
 import javax.mail.MessagingException;
 import javax.servlet.*;
@@ -19,7 +20,7 @@ public class RegisterController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
-        try (PrintWriter out = response.getWriter()) {
+        try {
             DAOSen dao = new DAOSen();
             String Register = request.getParameter("Register");
             if (Register == null) {
@@ -74,9 +75,11 @@ public class RegisterController extends HttpServlet {
                             + "\n"
                             + "</html>";
                     try {
-                        dao.send(email, subject, message, "tungnguyenn050499@gmail.com", "lwiyewmvqqmsaxaj");
+                        dao.send(email, subject, message, AbstractConstants.EMAIL_USERNAME, AbstractConstants.EMAIL_PASSWORD);
                     } catch (MessagingException e) {
                         e.printStackTrace();
+                        request.getRequestDispatcher("views/404.html").forward(request, response);
+                        return;
                     }
                     HttpSession sees = request.getSession();
                     sees.setAttribute("code", code);
@@ -88,7 +91,8 @@ public class RegisterController extends HttpServlet {
                 }
             }
         } catch (Exception e) {
-            request.getRequestDispatcher("404.html").forward(request, response);
+            e.printStackTrace();
+            request.getRequestDispatcher("views/404.html").forward(request, response);
         }
     }
 

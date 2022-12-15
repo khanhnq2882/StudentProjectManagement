@@ -38,7 +38,7 @@
 
     <!-- Earnings (Monthly) Card Example -->
     <div class="col-xl-3 col-md-6 mb-4">
-        <a href="ShowAllClass">
+        <a href="<%=request.getContextPath()%>/ShowAllClass">
             <div class="card border-left-primary shadow h-100 py-2">
 
                 <div class="card-body">
@@ -64,7 +64,7 @@
     
     <!-- Earnings (Monthly) Card Example -->
     <div class="col-xl-3 col-md-6 mb-4">
-        <a href="<%=request.getContextPath()%>/SubjectList">
+        <a href="<%=request.getContextPath()%>/SubjectManagement">
             <div class="card border-left-primary shadow h-100 py-2">
 
                 <div class="card-body">
@@ -84,7 +84,7 @@
     
     
     <div class="col-xl-3 col-md-6 mb-4">
-        <a href="Criteria">
+        <a href="<%=request.getContextPath()%>/CriteriaList">
             <div class="card border-left-primary shadow h-100 py-2">
 
                 <div class="card-body">

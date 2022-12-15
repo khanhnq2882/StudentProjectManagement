@@ -1,28 +1,22 @@
-package com.management.controller.team;
+package com.management.controller.setting;
 
-import com.management.dao.teamevaluation.DAOTeam;
-import com.management.dao.teamevaluation.DAOTeamDetail;
-import com.management.entity.Team;
+import com.management.dao.DAOSetting;
+import com.management.dao.DAOSettingDetail;
+import com.management.entity.Setting;
 import com.management.entity.User;
-
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.servlet.annotation.*;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-@WebServlet(name = "TeamDetailController", urlPatterns = {"/TeamDetail"})
-public class TeamDetailController extends HttpServlet {
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+@WebServlet(name = "SettingDetail", urlPatterns = {"/SettingDetail"})
+public class SettingDetail extends HttpServlet {
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -33,31 +27,37 @@ public class TeamDetailController extends HttpServlet {
                 request.getRequestDispatcher("Login_sen").forward(request, response);
             }
             String service = request.getParameter("go");
-            DAOTeam dao = new DAOTeam();
-            DAOTeamDetail dao1 = new DAOTeamDetail();
+            DAOSetting dao = new DAOSetting();
+            DAOSettingDetail dao1 = new DAOSettingDetail();
             if (service == null) {
-                service = "UpdateTeam";
+                service = "UpdateSetting";
             }
-            if (service.equals("UpdateTeam")) {
-                String TeamID = request.getParameter("team_id");
-                String classID = request.getParameter("Class");
-                Team list = dao.SearchSetID(TeamID);
-                request.setAttribute("Team", list);
-                List<Team> listClass = dao.viewClassId();
-
-                request.setAttribute("classList", listClass);
-                request.setAttribute("class", classID);
-                request.getRequestDispatcher("views/TeamDetail.jsp").forward(request, response);
-
+            if (service.equals("UpdateSetting")) {
+                String SetID = request.getParameter("setting_id");
+                String typeID = request.getParameter("Type");
+                //out.print(typeID);
+                Setting list = dao.SearchSetID(SetID);
+                request.setAttribute("Setting", list);
+                //out.print(list);
+                List<Setting> listType = dao.viewType();
+                request.setAttribute("listType", listType);
+                // out.print(listType);
+                request.setAttribute("s", list);
+                request.setAttribute("type", typeID);
+                request.getRequestDispatcher("/views/SettingDetails.jsp").forward(request, response);
             }
-            if (service.equals("TeamDetail")) {
-                String classID = request.getParameter("classID");
-                String topicCode = request.getParameter("topicCode");
-                String topicName = request.getParameter("topicName");
-                String gitlabURL = request.getParameter("gitlabURL");
+            if (service.equals("UpdateDetail")) {
+                int id = Integer.parseInt(request.getParameter("setting_id"));
+                int group = Integer.parseInt(request.getParameter("settingType"));
+                String set_order = request.getParameter("order");
+                String set_title = request.getParameter("lessontype");
+                String set_value = request.getParameter("value");
                 int status = Integer.parseInt(request.getParameter("status"));
-                dao1.editTeam(status, classID, topicCode, topicName, gitlabURL, status);
-                response.sendRedirect("TeamListController");
+                String note = request.getParameter("description");
+                // request.setAttribute("script", note);
+//                out.print(group+set_title+set_value+set_order+set_status+scrip);
+                dao1.editSetting(id, group, set_title, set_value, set_order, status, note);
+                response.sendRedirect("SettingListServlet");
             }
         } catch (Exception e) {
             request.getRequestDispatcher("404.html").forward(request, response);
