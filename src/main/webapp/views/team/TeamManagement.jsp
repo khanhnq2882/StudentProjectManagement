@@ -69,8 +69,7 @@
                                                     <a class="dropdown-item btn-delete" type="button"
                                                        data-toggle="modal" data-target="#deleteModal">Delete Team</a>
                                                     <a class="dropdown-item"
-                                                       href="<%=request.getContextPath()%>/IssueController?go=listByTeam&team_id=${o.team_id}">View
-                                                        Issue</a>
+                                                       href="<%=request.getContextPath()%>/TeamManagement?action=viewTeamMember&teamId=${o.team_id}">View team member</a>
                                                     <input type="hidden" name="teamId" value="${o.team_id}">
                                                 </div>
                                             </div>

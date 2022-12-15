@@ -77,7 +77,7 @@ public class TeamManagementController extends HttpServlet {
         List<User> listMember = daoTeam.viewMemberOfTeam(teamId);
         request.setAttribute("listMember", listMember);
         request.setAttribute("teamId", teamId);
-        request.getRequestDispatcher("/views/TeamMember.jsp").forward(request, response);
+        request.getRequestDispatcher("views/team/TeamMember.jsp").forward(request, response);
     }
 
     @Override
