@@ -735,7 +735,7 @@ public class DAOSen extends ConnectJDBC {
         return list;
     }
 
-    public List<Tracking> AllTracking(int index, String filter, String order) {
+    public List<Tracking> AllTracking(String filter, String order) {
         List<Tracking> list = new ArrayList<>();
         String sql = "SELECT * FROM tracking a\n"
                 + "left join team b on a.team_id = b.team_id\n"
@@ -744,14 +744,13 @@ public class DAOSen extends ConnectJDBC {
                 + "left join user e on e.user_id = a.assigner_id\n"
                 + "left join user f on f.user_id = a.assignee_id\n"
                 + "left join class g on g.class_id = b.class_id\n"
-                + "where a.status <> 0 " + filter + " " + order + "\n"
-                + "limit 10 offset " + (index - 1) * 10 + "";
+                + "where a.status <> 0 " + filter + " " + order;
         System.out.println(sql);
         ResultSet rs = getData(sql);
         try {
             while (rs.next()) {
                 list.add(new Tracking(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6),
-                        rs.getString(7), rs.getString(8), rs.getInt(9), rs.getString(16), rs.getString(23), rs.getString(26), rs.getString(36), rs.getString(50)));
+                        rs.getString(7), rs.getString(8), rs.getInt(9), rs.getString(16), rs.getString("milestone_id"), rs.getString(26), rs.getString(36), rs.getString(50)));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -777,7 +776,13 @@ public class DAOSen extends ConnectJDBC {
         ResultSet rs = getData(sql);
         try {
             while (rs.next()) {
-                list.add(new Milestone(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getString(4), rs.getString(5), rs.getInt(6), rs.getString(7)));
+                list.add(new Milestone(
+                        rs.getInt(1),
+                        rs.getInt(2),
+                        rs.getInt(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getInt(6)));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -914,5 +919,33 @@ public class DAOSen extends ConnectJDBC {
         }
     }
 
+    public String getIterationNameByMilestoneId(String id) {
+        String sql = "select i.iteration_name from milestone m join iteration i\n" +
+                "on m.interation_id = i.iteration_id\n" +
+                "where milestone_id = " + id;
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                return rs.getString(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
+    public User Userr(String user_id) {
+        String sql = "SELECT * FROM classuser a\n"
+                + "join user c on a.user_id = c.user_id\n"
+                + "where a.idclassuser = '" + user_id + "'";
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                return new User(rs.getString(13), rs.getString(14));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

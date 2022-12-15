@@ -17,6 +17,8 @@
     <jsp:include page="/general/Sidebar.jsp"></jsp:include>
     <!-- End of Sidebar -->
 
+    <jsp:useBean id="DAOSen" scope="page" class="com.management.dao.DAOSen"/>
+
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
 
@@ -59,7 +61,7 @@
                                     Milestone: <br>
                                     <select class="form-control form-control-user milestone_id" name="milestone_id">
                                         <c:forEach var="o" items="${lMilestone}">
-                                            <option value="${o.milestone_id}">${o.iterationName}</option>
+                                            <option value="${o.milestone_id}">${DAOSen.getIterationNameByMilestoneId(o.milestone_id)}</option>
                                         </c:forEach>
                                     </select>
                                     <span id=""></span>
@@ -143,9 +145,9 @@
     <script>
         function changeOption() {
             var idConfirm = "UpdateTracking";
-            var id = document.querySelector(".id").value
+            var id = document.querySelector(".id").value;
             $.ajax({
-                url: "/g1/UpdateTracking",
+                url: "/UpdateTracking",
                 type: "get",
                 data: {
                     idConfirm: idConfirm,
@@ -171,7 +173,8 @@
             var statuses = document.querySelector(".statuses").value;
             var idConfirm = "AddTracking";
             $.ajax({
-                url: "/g1/Confirm",
+                url: "Confirm",
+                dataType: 'json',
                 type: "get",
                 data: {
                     idConfirm: idConfirm,
@@ -184,32 +187,17 @@
                     updates: updates,
                     statuses: statuses
                 },
-                success: function (data) {
+                success: function (result) {
+                    console.log(result);
                     var confirm = document.getElementById("confirm");
-                    confirm.innerHTML = data;
+                    confirm.innerHTML = result;
                     $("#confirm1").modal("show");
-                },
-                error: function (xhr) {
+                }, error: function (e) {
+                    swal("", "Add tracking failed!", "error");
                 }
+
             });
         }
-
-        document.addEventListener('DOMContentLoaded', function () {
-            Fnon.Hint.Init({
-                zIndex: 9900,
-            });
-            // Hint
-            var message = "${message}";
-            var theme = "${theme}";
-            var title = "${title}";
-            var position = "right-top";
-            var animation = "slide-left";
-            Fnon.Hint[theme](message, {
-                title,
-                position,
-                animation,
-            })
-        });
     </script>
 
 </body>

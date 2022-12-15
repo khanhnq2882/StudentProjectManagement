@@ -42,7 +42,7 @@ public class AddTracking extends HttpServlet {
             request.setAttribute("message", "Add Tracking moi ok roi day");
             request.setAttribute("theme", "Success");
             dao.AddTracking(team_id, milestone_id, function_id, assigner_id, assignee_id, tracking_note, updates, status);
-            request.getRequestDispatcher("Tracking").forward(request, response);
+            request.getRequestDispatcher("/views/ViewTracking.jsp").forward(request, response);
             return;
         }
         String ClassId = request.getParameter("ClassId");

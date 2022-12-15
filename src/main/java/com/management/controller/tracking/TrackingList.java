@@ -106,7 +106,7 @@ public class TrackingList extends HttpServlet {
         classUser OneClass = dao.OneClass(class_id);
         List<Class_s> classes = dao.Class();
         List<Function> function = dao.Function();
-        List<Tracking> list = dao.AllTracking(pages, filter, order);
+        List<Tracking> list = dao.AllTracking(filter, order);
         request.setAttribute("list", list);
         request.setAttribute("classes", classes);
         request.setAttribute("OneClass", OneClass);

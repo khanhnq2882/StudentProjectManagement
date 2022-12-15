@@ -11,9 +11,9 @@
 <div id="wrapper">
     <!-- Sidebar -->
     <jsp:include page="/general/Sidebar.jsp"></jsp:include>
-    <!-- End of Sidebar -->
 
-    <!-- Content Wrapper -->
+    <jsp:useBean id="DAOSen" scope="page" class="com.management.dao.DAOSen"/>
+
     <div id="content-wrapper" class="d-flex flex-column">
 
         <!-- Main Content -->
@@ -37,7 +37,7 @@
                 <div style="margin-top:160px"></div>
                 <ul class="spbw">
                     <li><a type="submit" href="AddTracking?ClassId=${OneClass.class_id}"
-                           class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"/>Add new Tracking</a>
+                           class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"/>Add New Tracking</a>
                     <li>
                         <form style="display: flex !important;" action="TrackingList" method="POST" id="Form">
                             <select id="SearchBy" class="form-control form-control-user" name="class_id">
@@ -128,27 +128,6 @@
                             <table class="table table-bordered sentable" id="dataTable" width="100%" cellspacing="0">
                                 <thead>
                                 <tr>
-                                    <th id=" order by b.team_name" onclick="OrderBy(this)">Team
-                                        <ion-icon name="arrow-dropdown"></ion-icon>
-                                    </th>
-                                    <th id=" order by c.milestone_name" onclick="OrderBymilestone_name(this)">MileStone
-                                        <ion-icon name="arrow-dropdown"></ion-icon>
-                                    </th>
-                                    <th id=" order by d.function_name" onclick="OrderBy(this)">Function
-                                        <ion-icon name="arrow-dropdown"></ion-icon>
-                                    </th>
-                                    <th id=" order by e.fullname" onclick="OrderBy(this)">Assigner
-                                        <ion-icon name="arrow-dropdown"></ion-icon>
-                                    </th>
-                                    <th id=" order by f.fullname" onclick="OrderBy(this)">Assignee
-                                        <ion-icon name="arrow-dropdown"></ion-icon>
-                                    </th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                </tr>
-                                </thead>
-                                <tfoot>
-                                <tr>
                                     <th>Team</th>
                                     <th>MileStone</th>
                                     <th>Function</th>
@@ -157,12 +136,12 @@
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
-                                </tfoot>
+                                </thead>
                                 <tbody>
                                 <c:forEach var="o" items="${list}">
                                 <tr>
                                     <td>${o.team_name}</td>
-                                    <td>${o.milestone_name}</td>
+                                    <td>${DAOSen.getIterationNameByMilestoneId(o.milestone_id)}</td>
                                     <td>${o.function_name}</td>
                                     <td>${o.assigner_name}</td>
                                     <td>${o.assignee_name}</td>
@@ -193,24 +172,10 @@
                                 </tbody>
                                 </c:forEach>
                             </table>
-                            <div class="paging">
-                                <c:if test="${pages != 1}">
-                                    <a href="#" onclick="CongPage()"> << </a>
-                                </c:if>
-                                <p id="showpage" onclick="changetype()">${pages} of ${max}</p>
-                                <input name="page" oninput="changePage()" id="page" type="number" style="display: none"
-                                       max="" min="1" value="${pages}"/>
-                                <input id="gobtn" onclick="SubmitForm()" type="submit" style="display: none"
-                                       value="Go"/>
-                                <c:if test="${pages < max}">
-                                    <a href="#" onclick="TruPage()"> >> </a>
-                                </c:if>
-                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- /.container-fluid -->
                 <div id="confirm"></div>
             </div>
 
@@ -225,6 +190,7 @@
     </a>
     <!-- Logout Modal-->
     <jsp:include page="/general/LogOut.jsp"></jsp:include>
+
     <jsp:include page="/general/Footer.jsp"></jsp:include>
 
     <script>
@@ -290,23 +256,6 @@
                 }
             });
         }
-
-        document.addEventListener('DOMContentLoaded', function () {
-            Fnon.Hint.Init({
-                zIndex: 9900,
-            });
-            // Hint
-            var message = "${message}";
-            var theme = "${theme}";
-            var title = "${title}";
-            var position = "right-top";
-            var animation = "slide-left";
-            Fnon.Hint[theme](message, {
-                title,
-                position,
-                animation,
-            })
-        });
     </script>
 
 </body>
