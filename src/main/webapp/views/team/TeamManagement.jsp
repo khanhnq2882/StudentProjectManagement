@@ -69,7 +69,13 @@
                                                     <a class="dropdown-item btn-delete" type="button"
                                                        data-toggle="modal" data-target="#deleteModal">Delete Team</a>
                                                     <a class="dropdown-item"
-                                                       href="<%=request.getContextPath()%>/TeamManagement?action=viewTeamMember&teamId=${o.team_id}">View team member</a>
+                                                       href="<%=request.getContextPath()%>/TeamManagement?action=viewTeamMember&teamId=${o.team_id}">View
+                                                        team member</a>
+                                                    <c:if test="${sessionScope.Loged.role_id eq 2}">
+                                                        <a class="dropdown-item"
+                                                           href="<%=request.getContextPath()%>/TeamEvaluationList?go=listAllTeamEval&team=${o.team_id}">Evaluate
+                                                            for team</a>
+                                                    </c:if>
                                                     <input type="hidden" name="teamId" value="${o.team_id}">
                                                 </div>
                                             </div>
