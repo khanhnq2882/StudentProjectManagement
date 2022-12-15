@@ -29,15 +29,13 @@ public class DAOCriteria extends ConnectJDBC{
         }
         return 0;
     }
-    public List<Criteria> viewCriteriaList(int index) {
+    public List<Criteria> viewCriteriaList() {
         List<Criteria> list = new ArrayList<>();
-        String sql = "select  ar.*,ac.iteration_name, at.subject_code,at.subject_id "
-                + "from evaluation_criteria ar join iteration ac join subject at on ar.iteration_id = ac.iteration_id and ac.subject_id = at.subject_id "
-                + "Order by criteria_id limit 10 offset ?";
+        String sql = "select  ar.*,ac.iteration_name, at.subject_code,at.subject_id\n" +
+                "from evaluation_criteria ar join iteration ac join subject at on ar.iteration_id = ac.iteration_id and ac.subject_id = at.subject_id";
 
         try {
             ps = conn.prepareStatement(sql);
-            ps.setInt(1, (index - 1) * 10);
             rs = ps.executeQuery();
             while (rs.next()) {
                 list.add(new Criteria(rs.getInt(1), rs.getInt(2), rs.getDouble(3), rs.getBoolean(4), rs.getString(5), rs.getInt(6), rs.getInt(7), rs.getString(8), rs.getString(9), rs.getString(10), rs.getString(11), rs.getInt(12)));
@@ -49,9 +47,9 @@ public class DAOCriteria extends ConnectJDBC{
     }
     public List<Criteria> viewSubjectId() {
         List<Criteria> list = new ArrayList<>();
-        String sql = "select distinct at.subject_id,at.subject_code "
-                + "from evaluation_criteria ar join iteration ac join subject at "
-                + "on ar.iteration_id = ac.iteration_id and ac.subject_id=at.subject_id order by subject_name";
+        String sql = "select distinct at.subject_id,at.subject_code , subject_name\n" +
+                "           from evaluation_criteria ar join iteration ac join subject at \n" +
+                "             on ar.iteration_id = ac.iteration_id and ac.subject_id=at.subject_id order by subject_name";
         ResultSet rs = getData(sql);
         try {
             while (rs.next()) {

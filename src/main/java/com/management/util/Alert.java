@@ -6,7 +6,7 @@ public class Alert {
     public final static String ERROR = "error";
     public final static String WARNING = "warning";
 
-    public String alert(String title, String message, String state) {
+    public static String alert(String title, String message, String state) {
         return "<script>swal(\"" + title + "\", \"" + message + "\", \"" + state + "\");</script>";
     }
 }

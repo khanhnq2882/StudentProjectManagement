@@ -3,6 +3,7 @@ package com.management.controller.criteria;
 import com.management.dao.DAOCriteria;
 import com.management.entity.Criteria;
 import com.management.entity.User;
+import com.management.util.Alert;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,30 +12,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 
 @WebServlet(name = "CriteriaDetailController", urlPatterns = {"/CriteriaDetail"})
 public class CriteriaDetailController extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request  servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
+        try {
             HttpSession session = request.getSession();
             User Loged = (User) session.getAttribute("Loged");
             if (Loged == null) {
-                request.getRequestDispatcher("Login_sen").forward(request, response);
+                request.getRequestDispatcher("views/Login.jsp").forward(request, response);
             }
             String service = request.getParameter("go");
             DAOCriteria dao = new DAOCriteria();
@@ -44,55 +36,49 @@ public class CriteriaDetailController extends HttpServlet {
             if (service.equals("Update")) {
                 int cid = Integer.parseInt(request.getParameter("cid"));
                 String iterID = request.getParameter("Iter");
-                //String subID = request.getParameter("Sub");
                 Criteria c = dao.getCriteria(cid);
                 List<Criteria> listIterId = dao.viewIterName();
-                //     List<Criteria> listSubId = dao.viewSubjectCode();
                 request.setAttribute("IterList", listIterId);
-                //     request.setAttribute("SubList", listSubId);
                 request.setAttribute("ct", c);
                 request.setAttribute("iter", iterID);
-                //request.setAttribute("sub", subID);
-//              out.print(iterID);
-                request.getRequestDispatcher("/views/CriteriaDetails.jsp").forward(request, response);
+                request.getRequestDispatcher("/views/criteria/CriteriaDetails.jsp").forward(request, response);
+                return;
             }
 
             if (service.equals("updateCriteria")) {
                 int criteria_id = Integer.parseInt(request.getParameter("criteria_id"));
                 int iteration_id = Integer.parseInt(request.getParameter("iteration"));
                 Boolean evaluation = Boolean.parseBoolean(request.getParameter("evaluation"));
-                //Double weight = Double.parseDouble(request.getParameter("weight"));
                 String title = request.getParameter("title");
                 String weight = request.getParameter("weight");
                 String order = request.getParameter("order");
                 String loc = request.getParameter("loc");
                 int status = Integer.parseInt(request.getParameter("status"));
                 String des = request.getParameter("description");
-                // String iteration_name = request.getParameter("iteration_name");
-                // if (loc.matches("^\\d+$") && weight.matches("^(([1-9]\\d*)|0)(\\.\\d+)?") && order.matches("^\\d+$")) {
                 int loc1 = Integer.parseInt(loc);
                 double weight1 = Double.parseDouble(weight);
                 dao.updateCriteria(criteria_id, iteration_id, title, weight1, evaluation, order, loc1, status, des);
-                request.setAttribute("title", "Update thành công");
-                request.setAttribute("message", "Vua update duoc roi day!");
-                request.setAttribute("theme", "Success");
-                request.getRequestDispatcher("criteria").forward(request, response);
 
+                request.setAttribute("alert", new Alert().alert("", "Update criteria successfully!", Alert.SUCCESS));
+                List<Criteria> list = dao.viewCriteriaList();
+                List<Criteria> listCri = dao.viewSubjectId();
+                request.setAttribute("subjectList", listCri);
+                request.setAttribute("CriteriaList", list);
+                request.getRequestDispatcher("/views/criteria/CriteriaList.jsp").forward(request, response);
+                return;
             }
 
             if (service.equals("Delete")) {
                 int cid = Integer.parseInt(request.getParameter("cid"));
                 Criteria c = dao.getDelete(cid);
-                response.sendRedirect("criteria");
+                response.sendRedirect("CriteriaList");
+                return;
             }
             if (service.equals("add")) {
-                //   List<Criteria> listSubId = dao.viewSubjectCode();
-
-                //   request.setAttribute("SubList", listSubId);
                 List<Criteria> listIterId = dao.viewIterName();
                 request.setAttribute("IterList", listIterId);
-//                out.print(listIterId);
-                request.getRequestDispatcher("/views/AddCriteria.jsp").forward(request, response);
+                request.getRequestDispatcher("/views/criteria/AddCriteria.jsp").forward(request, response);
+                return;
             }
             if (service.equals("addCriteria")) {
                 int iteration_id = Integer.parseInt(request.getParameter("iteration"));
@@ -109,10 +95,9 @@ public class CriteriaDetailController extends HttpServlet {
                     Criteria c = new Criteria(iteration_id, weight1, evaluation, order, loc1, status, title, des);
                     int n = dao.addCriteria(c);
                     if (n > 0) {
-                        request.setAttribute("title", "Add thành công");
-                        request.setAttribute("message", "Vua add duoc roi day!");
-                        request.setAttribute("theme", "Success");
-                        request.getRequestDispatcher("criteria").forward(request, response);
+                        request.setAttribute("alert", new Alert().alert("", "Add criteria successfully!", Alert.SUCCESS));
+                        request.getRequestDispatcher("CriteriaList").forward(request, response);
+                        return;
                     }
                 } else {
                     if (!loc.matches("^\\d+$")) {
@@ -141,39 +126,28 @@ public class CriteriaDetailController extends HttpServlet {
 
                     List<Criteria> listIterId = dao.viewIterName();
                     request.setAttribute("IterList", listIterId);
-//                out.print(listIterId);
-                    request.getRequestDispatcher("/views/AddCriteria.jsp").forward(request, response);
+                    request.getRequestDispatcher("/views/criteria/AddCriteria.jsp").forward(request, response);
+                    return;
                 }
             }
         } catch (Exception e) {
-            request.getRequestDispatcher("404.html").forward(request, response);
+            e.printStackTrace();
+            request.getRequestDispatcher("views/404.html").forward(request, response);
         }
     }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Short description";
