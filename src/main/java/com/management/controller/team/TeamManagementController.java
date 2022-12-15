@@ -60,6 +60,8 @@ public class TeamManagementController extends HttpServlet {
                     doGet_addTeam(request, response);
                 } else if (action.equals("updateTeam")) {
                     doGet_updateTeam(request, response);
+                } else if (action.equals("viewTeamMember")) {
+                    doGet_viewTeamMember(request, response);
                 }
             } else {
                 processRequest(request, response);
@@ -68,6 +70,14 @@ public class TeamManagementController extends HttpServlet {
             e.printStackTrace();
             request.getRequestDispatcher("views/404.html").forward(request, response);
         }
+    }
+
+    private void doGet_viewTeamMember(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String teamId = request.getParameter("teamId");
+        List<User> listMember = daoTeam.viewMemberOfTeam(teamId);
+        request.setAttribute("listMember", listMember);
+        request.setAttribute("teamId", teamId);
+        request.getRequestDispatcher("/views/TeamMember.jsp").forward(request, response);
     }
 
     @Override

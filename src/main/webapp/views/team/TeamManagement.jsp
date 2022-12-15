@@ -45,38 +45,19 @@
                                     <th>GitLab URL</th>
                                     <th>Leader Name</th>
                                     <th>Status</th>
-                                    <th>Issues</th>
-                                    <c:if test="${Loged.role_id == 1}">
-                                        <th>Feature</th>
-                                    </c:if>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <c:forEach var="o" items="${teamList}">
                                     <tr class="row${o.team_id}">
-                                        <td><a href="TeamManagement?go=teamMember&team_id=${o.team_id}">${o.team_id}</a>
-                                        </td>
-                                        <td>${o.class_id}</td>
+                                        <td>${o.team_id}</td>
+                                        <td>${DAOSen.getClassById(o.class_id).classCode}</td>
                                         <td>${o.topic_code}</td>
                                         <td>${o.topic_name}</td>
                                         <td>${o.gitlab_url}</td>
-                                            <%--                                        <td>--%>
-                                            <%--                                            <a class=""--%>
-                                            <%--                                               href="IssueController?go=listIssueByUser&team_id=${o.team_id}">${o.team_name}</a>--%>
-                                            <%--                                        </td>--%>
                                         <td>${DAOSen.getUserById(o.teamLeader).fullname}</td>
-                                        <td>
-                                                ${o.status eq 1 ? "Activate" : "DeActivate"}
-                                        </td>
-                                        <td>
-                                            <a class=""
-                                               href="<%=request.getContextPath()%>/IssueController?go=listByTeam&team_id=${o.team_id}">View
-                                                Issue</a>
-                                        </td>
-                                        <c:if test="${Loged.role_id == 1}">
-                                            <td><a href="FeatureList">View Feature</a></td>
-                                        </c:if>
+                                        <td>${o.status eq 1 ? "Activate" : "DeActivate"}</td>
                                         <td>
                                             <div id="action-dropdown" class="dropdown">
                                                 <a class="dropdown-toggle" type="button" data-toggle="dropdown"
@@ -87,6 +68,9 @@
                                                         team</a>
                                                     <a class="dropdown-item btn-delete" type="button"
                                                        data-toggle="modal" data-target="#deleteModal">Delete Team</a>
+                                                    <a class="dropdown-item"
+                                                       href="<%=request.getContextPath()%>/IssueController?go=listByTeam&team_id=${o.team_id}">View
+                                                        Issue</a>
                                                     <input type="hidden" name="teamId" value="${o.team_id}">
                                                 </div>
                                             </div>
