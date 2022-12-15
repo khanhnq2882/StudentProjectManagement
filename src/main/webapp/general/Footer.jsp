@@ -14,5 +14,7 @@
 <script src="<c:url value="/assets/js/demo/datatables.js"/>"></script>
 <script src="<c:url value="/assets/js/SenJS.js"/>"></script>
 <script src="<c:url value="/assets/js/fnon.min.js"/>"></script>
+<script src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons.js"></script>
+
 
 ${alert eq null ? "" : alert}
