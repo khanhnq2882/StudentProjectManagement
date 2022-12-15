@@ -28,7 +28,7 @@
 
     <body id="page-top">
 
-    <jsp:useBean id="DAOSen" scope="page" />
+    <jsp:useBean id="DAOSen" scope="page" class="com.management.dao.DAOSen" />
 
         <!-- Page Wrapper -->
         <div id="wrapper">
