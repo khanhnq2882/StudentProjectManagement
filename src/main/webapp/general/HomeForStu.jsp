@@ -10,7 +10,9 @@
 <h1> Hello Student, <strong>${Loged.fullname}! </strong></h1>
 
 <div class="row">
-    
+
+    <jsp:useBean id="DAOTeam" scope="page" class="com.management.dao.teamevaluation.DAOTeam"/>
+
     <div class="col-xl-3 col-md-6 mb-4">
         <a href="LocStudent?go=&Tid=${Loged.user_id}">
             <div class="card border-left-primary shadow h-100 py-2">
@@ -28,8 +30,25 @@
             </div>
         </a>
     </div>
-    
-     
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <c:set var="teamId" value="${DAOTeam.getTeamByUserId(Loged.user_id).team_id}"/>
+        <a href="<%=request.getContextPath()%>/TeamEvaluationDetail?teamId=${teamId}">
+            <div class="card border-left-primary shadow h-100 py-2">
+
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">View your team evaluation</div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </a>
+    </div>
         
         
 </div>
