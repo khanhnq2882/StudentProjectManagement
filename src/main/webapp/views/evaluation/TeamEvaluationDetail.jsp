@@ -49,12 +49,14 @@
                                         </div>
                                         <div class="form-group mb-4">
                                             <label>Grade:</label>
-                                            <input type="text" class="form-control" name="grade" placeholder="Enter grade for team ...">
+                                            <input type="text" class="form-control" name="grade"
+                                                   placeholder="Enter grade for team ...">
                                         </div>
                                         <div class="form-group mb-4">
                                             <label class="font-weight-bold">Student 's performance</label><br>
                                             <label>What comment for this team?</label>
-                                            <textarea class="form-control" rows="3" name="note" placeholder="Enter a comment ..."></textarea>
+                                            <textarea class="form-control" rows="3" name="note"
+                                                      placeholder="Enter a comment ..."></textarea>
                                         </div>
                                         <button type="submit" class="btn btn-primary">Add evaluation</button>
                                     </form>
@@ -63,7 +65,8 @@
                                     <form action="<%=request.getContextPath()%>/TeamEvaluationDetail?action=update"
                                           method="POST">
                                         <input type="hidden" name="teamId" value="${teamEvaluation.team_id}">
-                                        <input type="hidden" name="teamEvaluationId" value="${teamEvaluation.team_eva_id}">
+                                        <input type="hidden" name="teamEvaluationId"
+                                               value="${teamEvaluation.team_eva_id}">
 
                                         <div class="form-group mb-4">
                                             <label class="font-weight-bold">Trainer</label><br>
@@ -83,24 +86,64 @@
                                         </div>
                                         <div class="form-group mb-4">
                                             <label>Grade:</label>
-                                            <input type="number" class="form-control" name="grade" placeholder="Enter grade for team ..."
+                                            <input type="number" class="form-control" name="grade"
+                                                   placeholder="Enter grade for team ..."
                                                    value="${teamEvaluation.grade}">
                                         </div>
                                         <div class="form-group mb-4">
                                             <label class="font-weight-bold">Student 's performance</label><br>
                                             <label>What comment for this team?</label>
-                                            <textarea class="form-control" rows="3" name="note" placeholder="Enter a comment ...">${teamEvaluation.note}</textarea>
+                                            <textarea class="form-control" rows="3" name="note"
+                                                      placeholder="Enter a comment ...">${teamEvaluation.note}</textarea>
                                         </div>
                                         <button type="submit" class="btn btn-primary">Update evaluation</button>
                                     </form>
                                 </c:if>
                             </c:if>
+                            <c:if test="${Loged.role_id eq 1}">
+                                <c:if test="${action eq 'update'}">
+                                    <input type="hidden" name="teamId" value="${teamEvaluation.team_id}">
+                                    <input type="hidden" name="teamEvaluationId" value="${teamEvaluation.team_eva_id}">
 
-                            <div class="mt-3">
-                                <a class="text-primary" href="<%=request.getContextPath()%>/TeamManagement">Back to
-                                    Manage
-                                    page</a>
-                            </div>
+                                    <div class="form-group mb-4">
+                                        <label class="font-weight-bold">Trainer</label><br>
+                                        <label>Trainer name:</label>
+                                        <c:set var="trainerId"
+                                               value="${DAOTemEvaluation.getTrainerByTeamId(teamEvaluation.team_id)}"/>
+                                        <input type="text" class="form-control col-md-6"
+                                               value="${DAOSen.getUserById(trainerId).fullname}" disabled>
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <label class="font-weight-bold">Team</label><br>
+                                        <label>Team leader:</label>
+                                        <c:set var="teamLeader"
+                                               value="${DAOTeam.getTeamById(teamEvaluation.team_id).teamLeader}"/>
+                                        <input type="text" class="form-control col-md-6"
+                                               value="${DAOSen.getUserById(teamLeader).fullname}" disabled>
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <label>Grade:</label>
+                                        <input type="number" class="form-control" name="grade"
+                                               placeholder="Enter grade for team ..."
+                                               value="${teamEvaluation.grade}" disabled>
+                                    </div>
+                                    <div class="form-group mb-4">
+                                        <label class="font-weight-bold">Student 's performance</label><br>
+                                        <label>What comment for this team?</label>
+                                        <textarea class="form-control" rows="3" name="note"
+                                                  placeholder="Enter a comment ..."
+                                                  disabled>${teamEvaluation.note}</textarea>
+                                    </div>
+                                </c:if>
+                            </c:if>
+
+                            <c:if test="${Loged.role_id ne 1}">
+                                <div class="mt-3">
+                                    <a class="text-primary" href="<%=request.getContextPath()%>/TeamManagement">Back to
+                                        Manage
+                                        page</a>
+                                </div>
+                            </c:if>
                         </div>
                     </div>
                 </div>

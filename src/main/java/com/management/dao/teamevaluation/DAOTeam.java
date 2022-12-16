@@ -291,9 +291,20 @@ public class DAOTeam extends ConnectJDBC {
         return null;
     }
 
-    public static void main(String[] args) {
-        DAOTeam daoTeam = new DAOTeam();
-        int n = daoTeam.addTeam(new Team());
-        System.out.println(n);
+    public Team getTeamByUserId(String userId) {
+        List<Team> list = new ArrayList<>();
+        String sql = "select t.* from team t join classuser cu\n" +
+                "on t.class_id = cu.class_id\n" +
+                "where cu.user_id = " + userId;
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                return new Team(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
+                        rs.getInt(6), rs.getString(7), rs.getString(8));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
 }
