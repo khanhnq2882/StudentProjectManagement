@@ -82,7 +82,12 @@
                         </div>
 
                         <button type="submit" class="btn btn-primary">Add Team</button>
+                        <br>
                     </form>
+                    <div class="mt-3">
+                        <a class="text-primary" href="<%=request.getContextPath()%>/TeamManagement">Back to Manage
+                            page</a>
+                    </div>
                 </div>
             </div>
         </div>

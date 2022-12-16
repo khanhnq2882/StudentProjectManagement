@@ -1,5 +1,6 @@
 package com.management.controller.team;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.management.dao.DAOSen;
 import com.management.dao.teamevaluation.DAOTeam;
 import com.management.entity.Class_s;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 @WebServlet(urlPatterns = {"/TeamManagement"})
@@ -58,6 +60,8 @@ public class TeamManagementController extends HttpServlet {
                     doGet_addTeam(request, response);
                 } else if (action.equals("updateTeam")) {
                     doGet_updateTeam(request, response);
+                } else if (action.equals("viewTeamMember")) {
+                    doGet_viewTeamMember(request, response);
                 }
             } else {
                 processRequest(request, response);
@@ -66,6 +70,14 @@ public class TeamManagementController extends HttpServlet {
             e.printStackTrace();
             request.getRequestDispatcher("views/404.html").forward(request, response);
         }
+    }
+
+    private void doGet_viewTeamMember(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String teamId = request.getParameter("teamId");
+        List<User> listMember = daoTeam.viewMemberOfTeam(teamId);
+        request.setAttribute("listMember", listMember);
+        request.setAttribute("teamId", teamId);
+        request.getRequestDispatcher("views/team/TeamMember.jsp").forward(request, response);
     }
 
     @Override
@@ -88,6 +100,8 @@ public class TeamManagementController extends HttpServlet {
                     doPost_addTeam(request, response);
                 } else if (action.equals("updateTeam")) {
                     doPost_updateTeam(request, response);
+                } else if (action.equals("deleteTeam")) {
+                    doPost_deleteTeam(request, response);
                 }
             } else {
                 processRequest(request, response);
@@ -98,11 +112,24 @@ public class TeamManagementController extends HttpServlet {
         }
     }
 
+    private void doPost_deleteTeam(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String teamId = request.getParameter("teamId");
+        PrintWriter out = response.getWriter();
+        ObjectMapper mapper = new ObjectMapper();
+
+        int n = daoTeam.deleteTeam(teamId);
+        if(n == 1) {
+            out.println(mapper.writeValueAsString(Alert.SUCCESS));
+        } else {
+            out.println(mapper.writeValueAsString(Alert.ERROR));
+        }
+    }
+
     private void doPost_addTeam(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Team team = new Team();
 
         team.setTeam_name(request.getParameter("teamName"));
-        team.setTeamLeader(request.getParameter("teamLead"));
+        team.setTeamLeader(request.getParameter("teamLeader"));
         team.setClass_id(request.getParameter("classId"));
         team.setTopic_code(request.getParameter("topicCode"));
         team.setTopic_name(request.getParameter("topicName"));
@@ -112,13 +139,11 @@ public class TeamManagementController extends HttpServlet {
         int n = daoTeam.addTeam(team);
         if(n == 1) {
             request.setAttribute("alert", new Alert().alert("", "Add team successfully!", Alert.SUCCESS));
-            doGet_addTeam(request, response);
-            return;
         } else {
             request.setAttribute("alert", new Alert().alert("", "Add team failed!", Alert.ERROR));
-            doGet_addTeam(request, response);
-            return;
         }
+        doGet_addTeam(request, response);
+        return;
     }
 
     private void doPost_updateTeam(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -136,13 +161,10 @@ public class TeamManagementController extends HttpServlet {
         int n = daoTeam.updateTeam(team);
         if(n == 1) {
             request.setAttribute("alert", new Alert().alert("", "Update team successfully!", Alert.SUCCESS));
-            doGet_updateTeam(request, response);
-            return;
         } else {
             request.setAttribute("alert", new Alert().alert("", "Update team failed!", Alert.ERROR));
-            doGet_updateTeam(request, response);
-            return;
         }
+        doGet_updateTeam(request, response);
     }
 
     private void doGet_addTeam(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -202,7 +202,7 @@
                         <li class="mb-3">
                             <select onchange="validateAuthor()" name="aname"
                                     class="form-control form-control-user" required>
-                                <option selected disabled>Select a option ...</option>
+                                <option selected disabled>Select a trainer ...</option>
                                 <c:forEach var="o" items="${listAuthor}">
                                     <option ${author == o.user_id ? "selected" : ""}
                                             value="${o.user_id}">${o.fullname}</option>

@@ -57,7 +57,7 @@
                     <h6 class="collapse-header">Author Setting:</h6>
                     <a class="collapse-item" href="SubjectSettingList">Subject Setting</a>
                     <a class="collapse-item" href="IterationListServlet">Iteration</a>
-                    <a class="collapse-item" href="Criteria">Criteria</a>
+                    <a class="collapse-item" href="<%=request.getContextPath()%>/CriteriaList">Criteria</a>
                 </div>
             </div>
         </li>
@@ -100,7 +100,7 @@
                
                 <a class="collapse-item"  href="FeatureList">Feature</a>
                 <a class="collapse-item"  href="FunctionList">Function</a>
-                <a class="collapse-item"  href="#">Tracking</a>
+                <a class="collapse-item"  href="TrackingList">Tracking</a>
                 <a class="collapse-item"  href="#">Loc</a>
             </div>
         </div>

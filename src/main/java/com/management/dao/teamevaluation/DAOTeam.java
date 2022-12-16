@@ -109,6 +109,20 @@ public class DAOTeam extends ConnectJDBC {
         }
         return n;
     }
+
+    public int deleteTeam(String teamId) {
+        int n = 0;
+        String sql = "delete from team where team_id = ?";
+        try {
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, teamId);
+            n = ps.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return n;
+    }
+
     public List<Team> getClassId(String cid) {
         List<Team> list = new ArrayList<>();
         String sql = "select * from team where class_id = " + cid;
@@ -140,7 +154,7 @@ public class DAOTeam extends ConnectJDBC {
         try {
             while (rs.next()) {
                 list.add(new Team(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
-                        rs.getInt(6), rs.getString(7)));
+                        rs.getInt(6), rs.getString(7), rs.getString(8)));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -245,11 +259,12 @@ public class DAOTeam extends ConnectJDBC {
     }
     public List<Team> getTeamId(String team_id) {
         List<Team> list = new ArrayList<>();
-        String sql = "select * from team where team_id = " + team_id + "";
+        String sql = "select * from team where team_id = " + team_id;
         ResultSet rs = getData(sql);
         try {
             while (rs.next()) {
-                list.add(new Team(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(6), rs.getString(7)));
+                list.add(new Team(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
+                        rs.getInt(6), rs.getString(7), rs.getString(8)));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -276,9 +291,20 @@ public class DAOTeam extends ConnectJDBC {
         return null;
     }
 
-    public static void main(String[] args) {
-        DAOTeam daoTeam = new DAOTeam();
-        int n = daoTeam.addTeam(new Team());
-        System.out.println(n);
+    public Team getTeamByUserId(String userId) {
+        List<Team> list = new ArrayList<>();
+        String sql = "select t.* from team t join classuser cu\n" +
+                "on t.class_id = cu.class_id\n" +
+                "where cu.user_id = " + userId;
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                return new Team(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
+                        rs.getInt(6), rs.getString(7), rs.getString(8));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
 }

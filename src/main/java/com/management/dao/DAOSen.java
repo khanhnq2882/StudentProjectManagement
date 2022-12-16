@@ -2,10 +2,7 @@ package com.management.dao;
 
 import com.management.connectdb.ConnectJDBC;
 import com.management.controller.ClassUser;
-import com.management.entity.classUser;
-import com.management.entity.Class_s;
-import com.management.entity.Subject;
-import com.management.entity.User;
+import com.management.entity.*;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
@@ -670,5 +667,285 @@ public class DAOSen extends ConnectJDBC {
             ex.printStackTrace();
         }
         return list;
+    }
+
+    public int countTracking(String filter) {
+        String sql = "SELECT COUNT(*) as COUNT FROM tracking a\n"
+                + "left join team b on a.team_id = b.team_id\n"
+                + "left join milestone c on a.milestone_id = c.milestone_id\n"
+                + "left join `function` d on d.function_id = a.function_id\n"
+                + "left join user e on e.user_id = a.assigner_id\n"
+                + "left join user f on f.user_id = a.assignee_id\n"
+                + "left join class g on g.class_id = b.class_id\n"
+                + "where a.status <> 0 " + filter + "";
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public List<Team> Team() {
+        List<Team> list = new ArrayList<>();
+        String sql = "SELECT * FROM team where status = 1;";
+        System.out.println(sql);
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                list.add(new Team(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getInt(6), rs.getString(7)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<Class_s> Class() {
+        List<Class_s> list = new ArrayList<>();
+        String sql = "select * from class where status = 1;";
+        System.out.println(sql);
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                list.add(new Class_s(rs.getInt(1), rs.getString(2)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<Function> Function() {
+        List<Function> list = new ArrayList<>();
+        String sql = "SELECT * FROM `function` where status = 1;";
+        System.out.println(sql);
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                list.add(new Function(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
+                        rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<Tracking> AllTracking(String filter, String order) {
+        List<Tracking> list = new ArrayList<>();
+        String sql = "SELECT * FROM tracking a\n"
+                + "left join team b on a.team_id = b.team_id\n"
+                + "left join milestone c on a.milestone_id = c.milestone_id\n"
+                + "left join `function` d on d.function_id = a.function_id\n"
+                + "left join user e on e.user_id = a.assigner_id\n"
+                + "left join user f on f.user_id = a.assignee_id\n"
+                + "left join class g on g.class_id = b.class_id\n"
+                + "where a.status <> 0 " + filter + " " + order;
+        System.out.println(sql);
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                list.add(new Tracking(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6),
+                        rs.getString(7), rs.getString(8), rs.getInt(9), rs.getString(16), rs.getString("milestone_id"), rs.getString(26), rs.getString(36), rs.getString(50)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public void UpdateTracking(String tracking_id, String status) {
+        String sql = "UPDATE tracking SET `status` = '" + status + "' WHERE (`tracking_id` = '" + tracking_id + "'); ";
+        try {
+            Connection conn = getConnection();
+            Statement s = conn.createStatement();
+            s.executeUpdate(sql);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public List<Milestone> Milestone() {
+        List<Milestone> list = new ArrayList<>();
+        String sql = "SELECT * FROM milestone where status = 1;";
+        System.out.println(sql);
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                list.add(new Milestone(
+                        rs.getInt(1),
+                        rs.getInt(2),
+                        rs.getInt(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getInt(6)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<User> Student2(String classid) {
+        List<User> list = new ArrayList<>();
+        String sql = "SELECT * FROM user a join classuser b on a.user_id = b.user_id\n"
+                + "where a.status = 1 and a.role_id = 1 and b.class_id = " + classid + "";
+        System.out.println(sql);
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                list.add(new User(rs.getInt(1), rs.getString(3), rs.getString(3), rs.getInt(1), rs.getString(3), rs.getString(3), rs.getString(3), rs.getInt(1)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<User> NotStudent(String classid) {
+        List<User> list = new ArrayList<>();
+        String sql = "SELECT * FROM user where user_id = (\n"
+                + "select trainer_id from class where class_id = " + classid + "\n"
+                + ")";
+        System.out.println(sql);
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                list.add(new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getInt(11)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public void AddTracking(String team_id, String milestone_id, String function_id, String assigner_id, String assignee_id, String tracking_note, String updates, String status) {
+        String sql = "INSERT INTO tracking (team_id, milestone_id, function_id, assigner_id, assignee_id, tracking_note, updates, status) \n"
+                + "VALUES (" + team_id + ", " + milestone_id + ", " + function_id + ", " + assigner_id + ", " + assignee_id + ", '" + tracking_note + "', '" + updates + "', " + status + ");";
+        try {
+            Connection conn = getConnection();
+            Statement s = conn.createStatement();
+            s.executeUpdate(sql);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public Tracking OneTracking(String tracking_id) {
+        String sql = "SELECT * FROM tracking a\n"
+                + "left join team b on a.team_id = b.team_id\n"
+                + "left join milestone c on a.milestone_id = c.milestone_id\n"
+                + "left join `function` d on d.function_id = a.function_id\n"
+                + "left join user e on e.user_id = a.assigner_id\n"
+                + "left join user f on f.user_id = a.assignee_id\n"
+                + "where a.tracking_id = " + tracking_id + "";
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                return new Tracking(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6),
+                        rs.getString(7), rs.getString(8), rs.getInt(9), rs.getString(16), rs.getString(23), rs.getString(26), rs.getString(36), rs.getString(50));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<Milestone> Milestone2(String tracking_id) {
+        List<Milestone> list = new ArrayList<>();
+        String sql = "SELECT * from milestone m left join class n on m.class_id = n.class_id\n"
+                + "where n.class_id = (\n"
+                + "SELECT a.class_id FROM class a\n"
+                + "left join team c on a.class_id = c.class_id where c.team_id = (\n"
+                + "SELECT a.team_id FROM tracking a\n"
+                + "left join team b on a.team_id = b.team_id\n"
+                + "left join milestone c on a.milestone_id = c.milestone_id\n"
+                + "left join `function` d on d.function_id = a.function_id\n"
+                + "left join user e on e.user_id = a.assigner_id\n"
+                + "left join user f on f.user_id = a.assignee_id\n"
+                + "where a.tracking_id = " + tracking_id + "\n"
+                + "))";
+        System.out.println(sql);
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                list.add(new Milestone(rs.getInt(1), rs.getInt(1), rs.getInt(1), rs.getString(7), rs.getString(7), rs.getInt(1), rs.getString(7)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<User> Student(String tracking_id) {
+        List<User> list = new ArrayList<>();
+        String sql = "SELECT a.user_id, a.fullname FROM user a left join classuser b on a.user_id = b.user_id\n"
+                + "left join team c on b.team_id = c.team_id where c.team_id = (\n"
+                + "SELECT a.team_id FROM tracking a\n"
+                + "left join team b on a.team_id = b.team_id\n"
+                + "left join milestone c on a.milestone_id = c.milestone_id\n"
+                + "left join `function` d on d.function_id = a.function_id\n"
+                + "left join user e on e.user_id = a.assigner_id\n"
+                + "left join user f on f.user_id = a.assignee_id\n"
+                + "where a.tracking_id = " + tracking_id + "\n"
+                + ") and a.role_id = 1";
+        System.out.println(sql);
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                list.add(new User(rs.getInt(1), rs.getString(2), rs.getString(2), rs.getInt(1), rs.getString(2), rs.getString(2), rs.getString(2), rs.getInt(1)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public void UpdateTracking(String tracking_id, String team_id, String milestone_id, String function_id, String assigner_id, String assignee_id, String tracking_note, String updates, String status) {
+        String sql = "UPDATE tracking SET `status` = '" + status + "', `team_id` = '" + team_id + "', `milestone_id` = '" + milestone_id + "', `function_id` = '" + function_id + "', "
+                + "`assigner_id` = '" + assigner_id + "', `assignee_id` = '" + assignee_id + "', `tracking_note` = '" + tracking_note + "', `updates` = '" + updates + "' "
+                + "WHERE (`tracking_id` = '" + tracking_id + "');\n";
+        System.out.println(sql);
+        try {
+            Connection conn = getConnection();
+            Statement s = conn.createStatement();
+            s.executeUpdate(sql);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public String getIterationNameByMilestoneId(String id) {
+        String sql = "select i.iteration_name from milestone m join iteration i\n" +
+                "on m.interation_id = i.iteration_id\n" +
+                "where milestone_id = " + id;
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                return rs.getString(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public User Userr(String user_id) {
+        String sql = "SELECT * FROM classuser a\n"
+                + "join user c on a.user_id = c.user_id\n"
+                + "where a.idclassuser = '" + user_id + "'";
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                return new User(rs.getString(13), rs.getString(14));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

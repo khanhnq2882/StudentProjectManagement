@@ -1,20 +1,20 @@
 package com.management.entity;
 
 public class Tracking {
-    int tracking_id;
-    int team_id_id;
-    int milestone_id;
-    int function_id;
-    int assigner_id;
-    int assignee_id;
-    String tracking_note;
-    String update;
-    int status;
-    String team_name;
-    String milestone_name;
-    String function_name;
-    String assigner_name;
-    String assignee_name;
+    private int tracking_id;
+    private int team_id_id;
+    private int milestone_id;
+    private int function_id;
+    private int assigner_id;
+    private int assignee_id;
+    private String tracking_note;
+    private String update;
+    private int status;
+    private String team_name;
+    private String milestone_name;
+    private String function_name;
+    private String assigner_name;
+    private String assignee_name;
 
     public Tracking() {
     }

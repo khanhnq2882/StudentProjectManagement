@@ -1,3 +1,5 @@
+<%@ page import="com.management.util.AbstractConstants" %>
+<%@ page import="com.management.util.Alert" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 
@@ -43,68 +45,40 @@
                                     <th>GitLab URL</th>
                                     <th>Leader Name</th>
                                     <th>Status</th>
-                                    <th>Issues</th>
-                                    <c:if test="${Loged.role_id == 1}">
-                                        <th>Feature</th>
-                                    </c:if>
                                     <th>Action</th>
-                                    <th>Update Status</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <c:forEach var="o" items="${teamList}">
-                                    <tr>
-                                        <td><a href="TeamManagement?go=teamMember&team_id=${o.team_id}">${o.team_id}</a>
-                                        </td>
-                                        <td>${o.class_id}</td>
+                                    <tr class="row${o.team_id}">
+                                        <td>${o.team_id}</td>
+                                        <td>${DAOSen.getClassById(o.class_id).classCode}</td>
                                         <td>${o.topic_code}</td>
                                         <td>${o.topic_name}</td>
                                         <td>${o.gitlab_url}</td>
+                                        <td>${DAOSen.getUserById(o.teamLeader).fullname}</td>
+                                        <td>${o.status eq 1 ? "Activate" : "DeActivate"}</td>
                                         <td>
-                                            <a class=""
-                                               href="IssueController?go=listIssueByUser&team_id=${o.team_id}">${o.team_name}</a>
-                                        </td>
-                                        <td>
-                                            <c:if test="${o.status == 1}">
-                                                <% out.print("Activate"); %>
-                                            </c:if>
-                                            <c:if test="${o.status == 2}">
-                                                <% out.print("Deactivate"); %>
-                                            </c:if>
-                                        </td>
-                                        <td>
-                                            <a class="" href="IssueController?go=listByTeam&team_id=${o.team_id}">View
-                                                Team's Issue of Team ${o.team_id}</a>
-                                        </td>
-                                        <c:if test="${Loged.role_id == 1}">
-                                            <td><a href="FeatureList">View Feature</a></td>
-                                        </c:if>
-                                        <td>
-                                            <div class="d-flex justify-content-center" style="font-size: 20px;">
-<%--                                                <c:if test="${Loged.role_id == 2}">--%>
-                                                    <a class="mr-2" href="<%=request.getContextPath()%>/TeamEvaluationList?go=listAllTeamEval&team=${o.team_id}"><i
-                                                            class="fa-solid fa-eye"></i></a>
-<%--                                                </c:if>--%>
-                                                <a href="<%=request.getContextPath()%>/TeamManagement?action=updateTeam&teamId=${o.team_id}"><i
-                                                        class="fa-solid fa-pen-to-square"></i></a>
+                                            <div id="action-dropdown" class="dropdown">
+                                                <a class="dropdown-toggle" type="button" data-toggle="dropdown"
+                                                   aria-expanded="false"><i class="fa-solid fa-gear"></i></a>
+                                                <div class="dropdown-menu">
+                                                    <a class="dropdown-item"
+                                                       href="<%=request.getContextPath()%>/TeamManagement?action=updateTeam&teamId=${o.team_id}">Update
+                                                        team</a>
+                                                    <a class="dropdown-item btn-delete" type="button"
+                                                       data-toggle="modal" data-target="#deleteModal">Delete Team</a>
+                                                    <a class="dropdown-item"
+                                                       href="<%=request.getContextPath()%>/TeamManagement?action=viewTeamMember&teamId=${o.team_id}">View
+                                                        team member</a>
+                                                    <c:if test="${sessionScope.Loged.role_id eq 2}">
+                                                        <a class="dropdown-item"
+                                                           href="<%=request.getContextPath()%>/TeamEvaluationDetail?teamId=${o.team_id}">Evaluate
+                                                            for team</a>
+                                                    </c:if>
+                                                    <input type="hidden" name="teamId" value="${o.team_id}">
+                                                </div>
                                             </div>
-                                        </td>
-                                        <td>
-                                            <form method="POST" action="TeamManagement?go=listAllTeam&cid=${o.team_id}">
-                                                <input type="hidden" name="go" value="updateStatus">
-                                                <c:if test="${o.status == 2}">
-                                                    <input type="hidden" name="cid" value="${o.team_id}" readonly>
-                                                    <input type="hidden" name="teamId" value="${o.team_id}" readonly>
-                                                    <input type="hidden" name="status" value="${o.team_id}" readonly>
-                                                    <input type="submit" name="submit" value="Activate">
-                                                </c:if>
-                                                <c:if test="${o.status == 1}">
-                                                    <input type="hidden" name="cid" value="${o.team_id}" readonly>
-                                                    <input type="hidden" name="teamId" value="${o.team_id}" readonly>
-                                                    <input type="hidden" name="status" value="${o.team_id}" readonly>
-                                                    <input type="submit" name="submit" value="Deactivate">
-                                                </c:if>
-                                            </form>
                                         </td>
                                     </tr>
                                 </c:forEach>
@@ -122,6 +96,26 @@
 <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
 </a>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete Team</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure to delete this Team?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn-delete btn btn-danger">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <jsp:include page="/general/LogOut.jsp"></jsp:include>
 
@@ -164,6 +158,40 @@
 
         $('#dataTable_filter').append(html);
     });
+</script>
+
+<script>
+    var teamId;
+    $('#dataTable .btn-delete').on('click', function () {
+        teamId = $(this).parent().find('input[name="teamId"]').val();
+        console.log(teamId);
+    });
+
+    $('#deleteModal .btn-delete').on('click', function () {
+        $.ajax({
+            url: "TeamManagement",
+            dataType: 'json',
+            type: "post",
+            data: {
+                action: 'deleteTeam',
+                teamId: teamId
+            },
+            success: function (result) {
+                console.log(result);
+                if (result === '<%=Alert.SUCCESS%>') {
+                    swal("", "Delete team successfully!", '<%=Alert.SUCCESS%>');
+                    $('.row' + teamId).hide();
+                } else {
+                    swal("", "Delete team failed!", '<%=Alert.ERROR%>');
+                    $('.row' + teamId).hide();
+                }
+                $('#deleteModal').modal('hide');
+            }, error: function (e) {
+                swal("", "Delete team failed!", "error");
+                $('#deleteModal').modal('hide');
+            }
+        });
+    })
 </script>
 
 </body>
