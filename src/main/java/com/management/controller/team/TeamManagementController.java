@@ -139,13 +139,11 @@ public class TeamManagementController extends HttpServlet {
         int n = daoTeam.addTeam(team);
         if(n == 1) {
             request.setAttribute("alert", new Alert().alert("", "Add team successfully!", Alert.SUCCESS));
-            doGet_addTeam(request, response);
-            return;
         } else {
             request.setAttribute("alert", new Alert().alert("", "Add team failed!", Alert.ERROR));
-            doGet_addTeam(request, response);
-            return;
         }
+        doGet_addTeam(request, response);
+        return;
     }
 
     private void doPost_updateTeam(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
