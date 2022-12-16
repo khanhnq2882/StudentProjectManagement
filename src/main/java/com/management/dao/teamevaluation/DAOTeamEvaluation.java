@@ -95,18 +95,39 @@ public class DAOTeamEvaluation extends ConnectJDBC {
         return "";
     }
 
-    public void editTeamEval(int team_eva_id, int eva_id, int criteria_id, int team_id, int grade, String note) {
-        String sql = "update `team-evaluation` set evaluation_id = ?, criteria_id = ?, team_id = ?, grade = ?, note = ? \n"
-                + "where team_eva_id = ?";
+    public int editTeamEval(int teamId, String grade, String note, int teamEvaluationId) {
+        int result = 0;
+        String sql = "update `team-evaluation` set team_id = ?, grade = ?, note = ? \n"
+                + "where team_eval_id = ?";
         try {
             ps = conn.prepareStatement(sql);
-            ps.setInt(1, team_id);
-            ps.setInt(2, grade);
+            ps.setInt(1, teamId);
+            ps.setString(2, grade);
             ps.setString(3, note);
-            ps.setInt(4, team_eva_id);
+            ps.setInt(4, teamEvaluationId);
+            result = ps.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+        return result;
+    }
+
+    public int addTeamEval(int evaluationId, int criteriaId, int teamId, String grade, String note) {
+        int result = 0;
+        String sql = "INSERT INTO `team-evaluation` (evaluation_id, criteria_id, team_id, grade, note)\n" +
+                "VALUES (?, ?, ?, ?, ?);";
+        try {
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, evaluationId);
+            ps.setInt(2, criteriaId);
+            ps.setInt(3, teamId);
+            ps.setString(4, grade);
+            ps.setString(5, note);
+            result = ps.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return result;
     }
 
     public Team viewTeam(String team) {
@@ -205,5 +226,33 @@ public class DAOTeamEvaluation extends ConnectJDBC {
         }
         return list;
     }
-    
+
+    public TeamEvaluation getLastTeamEvaluation(String teamId) {
+        String sql = "select * from `team-evaluation` where team_id = " + teamId + "\n" +
+                "order by team_eval_id desc";
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                return new TeamEvaluation(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getString(6));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    public String getTrainerByTeamId(String teamId) {
+        String sql = "select c.trainer_id from team t join class c\n" +
+                "on t.class_id = c.class_id\n" +
+                "where t.team_id = " + teamId;
+        ResultSet rs = getData(sql);
+        try {
+            while (rs.next()) {
+                return rs.getString(1);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
 }

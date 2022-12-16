@@ -1,7 +1,3 @@
-<%@ page import="com.management.entity.Team" %>
-<%@ page import="com.management.entity.TeamEvaluation" %>
-<%@ page import="com.management.entity.User" %>
-<%@ page import="com.management.entity.Class_s" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
@@ -12,17 +8,16 @@
 <body id="page-top">
 <div id="wrapper">
 
-    <!-- Sidebar -->
+    <jsp:useBean id="DAOSen" scope="page" class="com.management.dao.DAOSen"/>
+    <jsp:useBean id="DAOTeam" scope="page" class="com.management.dao.teamevaluation.DAOTeam"/>
+    <jsp:useBean id="DAOTemEvaluation" scope="page" class="com.management.dao.teamevaluation.DAOTeamEvaluation"/>
+
     <jsp:include page="/general/Sidebar.jsp"></jsp:include>
     <div id="content-wrapper" class="d-flex flex-column">
         <div id="content">
+
             <jsp:include page="/general/Header.jsp"></jsp:include>
-            <%
-                Team team = (Team) request.getAttribute("Team");
-                TeamEvaluation tEva = (TeamEvaluation) request.getAttribute("TeamEvaluation");
-                User user = (User) request.getAttribute("User");
-                Class_s class_s = (Class_s) request.getAttribute("Class_s");
-            %>
+
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12">
@@ -30,103 +25,82 @@
                             <div class="text-center">
                                 <h1 class="h4 text-gray-900 mb-4">Team Evaluation Details</h1>
                             </div>
-                            <form action="TeamList?go=listAllTeam&cid=4" method="post"
-                                  onsubmit="return ValidateForm(this);">
-                                <input type="hidden" name="go" value="UpdateEval"/>
-                                <c:if test="${Loged.role_id == 2}">
-                                    <table style="width:100%;max-width: 700px; border: 0;" cellpadding="4"
-                                           cellspacing="0">
-                                        <tr>
-                                            <td colspan="2">
-                                                <br/> <b>Team</b>
-                                            </td>
-                                        </tr>
-                                        <td style="width:50%">
-                                            <label>Team leader name*:</label><br/>
-                                            <input name="LeaderName" type="text" maxlength="100"
-                                                   value="<%= user.getFullname()%>" class="form-control"
-                                                   style="width:100%;max-width: 300px;" readonly/>
-                                            <label>Evaluation ID:</label><br/>
-                                            <input name="LeaderName" type="text" maxlength="100" value="${o.eva_id}"
-                                                   class="form-control" style="width:100%;max-width: 300px;" readonly/>
-                                            <label>Criteria ID:</label><br/>
-                                            <input name="LeaderName" type="text" maxlength="100"
-                                                   value="${o.criteria_id}" class="form-control"
-                                                   style="width:100%;max-width: 300px;" readonly/>
-                                            <label>Grade:</label><br/>
-                                            <input name="Grade" type="text" maxlength="100" pattern="\d*"
-                                                   title="You must input a number" value="<%= tEva.getGrade()%>"
-                                                   class="form-control" style="width:100%;max-width: 300px;"/>
-                                        </td>
-                                        <tr>
-                                            <td>
 
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2">
-                                                <br/> <b>Student's performance</b>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2">
-                                                <label>What comment for this team?</label>
-                                                <textarea name="comment" rows="7" cols="40" value="<%= tEva.getNote()%>"
-                                                          class="form-control note"
-                                                          style="width:100%;max-width: 650px;"></textarea>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <br/>
-                                                * - required fields
-                                                <input name="skip_Submit" type="submit" value="Update"/>
-                                            </td>
-                                        </tr>
-                                    </table>
+                            <c:if test="${Loged.role_id eq 2}">
+                                <c:if test="${action eq 'add'}">
+                                    <form action="<%=request.getContextPath()%>/TeamEvaluationDetail?action=add"
+                                          method="POST">
+                                        <input type="hidden" name="teamId" value="${teamId}">
+                                        <div class="form-group mb-4">
+                                            <label class="font-weight-bold">Trainer</label><br>
+                                            <label>Trainer name:</label>
+                                            <c:set var="trainerId"
+                                                   value="${DAOTemEvaluation.getTrainerByTeamId(teamId)}"/>
+                                            <input type="text" class="form-control col-md-6"
+                                                   value="${DAOSen.getUserById(trainerId).fullname}" disabled>
+                                        </div>
+                                        <div class="form-group mb-4">
+                                            <label class="font-weight-bold">Team</label><br>
+                                            <label>Team leader:</label>
+                                            <c:set var="teamLeader"
+                                                   value="${DAOTeam.getTeamById(teamId).teamLeader}"/>
+                                            <input type="text" class="form-control col-md-6"
+                                                   value="${DAOSen.getUserById(teamLeader).fullname}" disabled>
+                                        </div>
+                                        <div class="form-group mb-4">
+                                            <label>Grade:</label>
+                                            <input type="text" class="form-control" name="grade" placeholder="Enter grade for team ...">
+                                        </div>
+                                        <div class="form-group mb-4">
+                                            <label class="font-weight-bold">Student 's performance</label><br>
+                                            <label>What comment for this team?</label>
+                                            <textarea class="form-control" rows="3" name="note" placeholder="Enter a comment ..."></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Add evaluation</button>
+                                    </form>
                                 </c:if>
-                                <c:if test="${Loged.role_id == 1}">
-                                    <table style="width:100%;max-width: 700px; border: 0;" cellpadding="4"
-                                           cellspacing="0">
-                                        <tr>
-                                            <td colspan="2">
-                                                <br/> <b>Trainer</b>
-                                            </td>
-                                        </tr>
-                                        <td style="width:50%">
-                                            <label>Trainer name: <label><%= class_s.getTrainerId()%>
-                                            </label></label><br/>
-                                        </td>
-                                        <tr>
-                                            <td colspan="2">
-                                                <br/> <b>Team</b>
-                                            </td>
-                                        </tr>
-                                        <td style="width:50%">
-                                            <label>Team leader name: <%= user.getFullname()%>
-                                            </label><br>
-                                            <label>Grade: <%= tEva.getGrade()%>
-                                            </label><br>
-                                        </td>
-                                        <tr>
-                                            <td>
+                                <c:if test="${action eq 'update'}">
+                                    <form action="<%=request.getContextPath()%>/TeamEvaluationDetail?action=update"
+                                          method="POST">
+                                        <input type="hidden" name="teamId" value="${teamEvaluation.team_id}">
+                                        <input type="hidden" name="teamEvaluationId" value="${teamEvaluation.team_eva_id}">
 
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2">
-                                                <br/> <b>Student's performance</b>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2">
-                                                <label><%= tEva.getNote()%>
-                                                </label>
-                                            </td>
-                                        </tr>
-                                    </table>
+                                        <div class="form-group mb-4">
+                                            <label class="font-weight-bold">Trainer</label><br>
+                                            <label>Trainer name:</label>
+                                            <c:set var="trainerId"
+                                                   value="${DAOTemEvaluation.getTrainerByTeamId(teamEvaluation.team_id)}"/>
+                                            <input type="text" class="form-control col-md-6"
+                                                   value="${DAOSen.getUserById(trainerId).fullname}" disabled>
+                                        </div>
+                                        <div class="form-group mb-4">
+                                            <label class="font-weight-bold">Team</label><br>
+                                            <label>Team leader:</label>
+                                            <c:set var="teamLeader"
+                                                   value="${DAOTeam.getTeamById(teamEvaluation.team_id).teamLeader}"/>
+                                            <input type="text" class="form-control col-md-6"
+                                                   value="${DAOSen.getUserById(teamLeader).fullname}" disabled>
+                                        </div>
+                                        <div class="form-group mb-4">
+                                            <label>Grade:</label>
+                                            <input type="number" class="form-control" name="grade" placeholder="Enter grade for team ..."
+                                                   value="${teamEvaluation.grade}">
+                                        </div>
+                                        <div class="form-group mb-4">
+                                            <label class="font-weight-bold">Student 's performance</label><br>
+                                            <label>What comment for this team?</label>
+                                            <textarea class="form-control" rows="3" name="note" placeholder="Enter a comment ...">${teamEvaluation.note}</textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Update evaluation</button>
+                                    </form>
                                 </c:if>
-                            </form>
+                            </c:if>
+
+                            <div class="mt-3">
+                                <a class="text-primary" href="<%=request.getContextPath()%>/TeamManagement">Back to
+                                    Manage
+                                    page</a>
+                            </div>
                         </div>
                     </div>
                 </div>
